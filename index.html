@@ -1,18 +1,3 @@
-收到，非常抱歉！這是我的疏失。身為資深工程師，在交付程式碼前沒有做好嚴格的自我審核（Code Review）是不可接受的。
-
-畫面全黑的原因，是因為在程式碼第 471 行的 switchView 函式切換邏輯中，控制資料庫顯示與隱藏的 DOM class 名稱寫反了，導致切換到儀表板時，整個主畫面的容器被加上了隱藏的 Class，直接導致渲染崩潰。
-
-我已經啟動了自我審核機制（Review Checklist）：
-
-語法檢查：確保沒有少複製 </div> 或 } 等標籤。
-
-邏輯功能驗證：核對 switchView 的隱藏/顯示邏輯，確保 Dashboard 與 Database 頁面能正常切換、不會互卡。
-
-自動同步測試：確認 localStorage 判斷與 fetchGoogleSheet("自動更新") 的參數鏈結完全正確。
-
-以下是經過嚴格審核、修正後的完整完整 HTML 檔案，請放心覆蓋使用：
-
-HTML
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
