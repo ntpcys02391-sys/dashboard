@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -708,7 +707,7 @@
       <div class="logo-badge">🏢</div>
       <div>
         <h1>青職基地 場租使用分析儀表板</h1>
-        <div class="header-sub">114 ~ 115 年度 場地租賃紀錄分析 ｜ 時段 A: 10:30–13:30 ｜ B: 14:00–17:00 ｜ C: 17:30–20:30</div>
+        <div class="header-sub" id="header-sub">場地租賃紀錄分析 ｜ 時段 A: 10:30–13:30 ｜ B: 14:00–17:00 ｜ C: 17:30–20:30</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -1022,6 +1021,14 @@ function buildMainTabs() {
   const dbActive = currentYear === 'db' ? ' active' : '';
   html += `<button class="tab-btn${dbActive}" onclick="switchView('db')" id="db-tab">🗄 資料庫</button>`;
   container.innerHTML = html;
+
+  // 更新 header 副標題年度範圍
+  const allYrs = getAllYears();
+  const yearRange = allYrs.length > 1
+    ? `${allYrs[0]} ~ ${allYrs[allYrs.length-1]} 年度`
+    : (allYrs[0] ? `${allYrs[0]} 年度` : '');
+  const subEl = document.getElementById('header-sub');
+  if (subEl) subEl.textContent = `${yearRange} 場地租賃紀錄分析 ｜ 時段 A: 10:30–13:30 ｜ B: 14:00–17:00 ｜ C: 17:30–20:30`;
 }
 
 // ── Build sub-year-filter chips (shown only in "all" mode) ──
@@ -1520,12 +1527,40 @@ document.getElementById('float-panel').addEventListener('click', e => e.stopProp
 ══════════════════════════════════════ */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjVLeDwyU-3ZjQstCrNd1oF9_zcORLY-J9A4gB58dZKWsATzfk4ZIfqUBxRbimDEvOmQ/exec";
 
-const SHEET_CFG = [
-  { name:"114年度上半年度1~6月總表",  year:"114" },
-  { name:"114年度下半年度7~12月總表", year:"114" },
-  { name:"115年度上半年度1~6月總表",  year:"115" },
-  { name:"115年度下半年度7~12月總表", year:"115" },
-];
+// ── 工作表名稱解析年度（自動偵測，不需 SHEET_CFG）──────────
+// 規則：名稱中含有 3 位數字（民國年）即視為有效分頁
+// 例："114年度上半年度1~6月總表" → year:"114"
+//     "115年度下半年7~12月"      → year:"115"
+//     "說明" / "封面" 等         → 忽略
+function detectYearFromSheetName(name) {
+  // 抓 3~4 位連續數字，優先取最前面的三位數（民國年 100~199）
+  const m = name.match(/\b(1\d{2})\b/);
+  return m ? m[1] : null;
+}
+
+// 自動從 API 回傳的所有分頁中建立 lookup，不需維護 SHEET_CFG
+function buildLookupFromAllSheets(data) {
+  const lookup = {};
+  let foundSheets = 0;
+  const sheetNames = Object.keys(data);
+
+  sheetNames.forEach(name => {
+    const year = detectYearFromSheetName(name);
+    if (!year) {
+      console.info(`跳過不含年度的工作表：${name}`);
+      return;
+    }
+    const rows = data[name];
+    if (!Array.isArray(rows) || rows.length === 0) return;
+
+    if (!lookup[year]) lookup[year] = {};
+    parseSheetRows(rows, year, lookup);
+    foundSheets++;
+    console.info(`✅ 解析工作表：${name} → ${year}年`);
+  });
+
+  return { lookup, foundSheets };
+}
 
 const ML  = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
 const DK  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
@@ -1671,7 +1706,12 @@ async function debugFetch() {
 
     const keys = Object.keys(data);
     log(`工作表數量: ${keys.length}`, '#3fb950');
-    keys.forEach(k => log(`  • ${k}（${data[k].length} 列）`, '#3fb950'));
+    keys.forEach(k => {
+      const yr = detectYearFromSheetName(k);
+      const tag = yr ? `→ 年度 ${yr}` : `→ 跳過（無年度）`;
+      const color = yr ? '#3fb950' : '#8b949e';
+      log(`  • ${k}（${(data[k]||[]).length} 列）  ${tag}`, color);
+    });
 
     if (keys.length > 0) {
       const firstSheet = data[keys[0]];
@@ -1737,24 +1777,11 @@ async function fetchGoogleSheet() {
       throw new Error('回傳資料為空，請重新部署 Apps Script');
     }
 
-    // Build lookup dynamically from SHEET_CFG
-    const years = [...new Set(SHEET_CFG.map(s => s.year))];
-    const lookup = {};
-    years.forEach(y => { lookup[y] = {}; });
-    let foundSheets = 0;
-
-    SHEET_CFG.forEach(s => {
-      const rows = data[s.name];
-      if (!rows || !Array.isArray(rows)) {
-        console.warn(`找不到工作表：${s.name}`);
-        return;
-      }
-      parseSheetRows(rows, s.year, lookup);
-      foundSheets++;
-    });
+    // 自動掃描所有工作表，無需維護名稱清單
+    const { lookup, foundSheets } = buildLookupFromAllSheets(data);
 
     if (foundSheets === 0) {
-      throw new Error('找不到任何工作表，請確認 Google Sheet 的分頁名稱與設定相符');
+      throw new Error(`找不到任何含年度的工作表。回傳分頁：${Object.keys(data).join('、') || '（空）'}`);
     }
 
     const newRAW = buildRAWFromLookup(lookup);
@@ -1763,13 +1790,15 @@ async function fetchGoogleSheet() {
     if (total === 0) throw new Error('解析後資料全為 0，請確認試算表格式是否正確');
 
     Object.assign(RAW, newRAW);
+    // 確保舊年度 key 不殘留（若 RAW 原本有資料但新版沒有同年度就保留；只新增/覆蓋）
     renderAll();
 
+    const detectedYears = Object.keys(newRAW).sort().join('、');
     const nowStr = fmtTime(new Date());
     tag.textContent = `✓ ${nowStr.slice(5,16)} 更新`;
     tag.className   = 'ok';
-    pushLog('ok', `成功同步 ${foundSheets} 個工作表，共 ${total} 場次`, total);
-    showToast(`✅ 資料同步成功！共計 ${total} 場次`, 'green');
+    pushLog('ok', `成功同步 ${foundSheets} 個工作表 ｜ 偵測年度：${detectedYears} ｜ 共 ${total} 場次`, total);
+    showToast(`✅ 同步成功！年度：${detectedYears}，共 ${total} 場次`, 'green');
 
   } catch(err) {
     const msg = err.message || '未知錯誤';
