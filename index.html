@@ -712,11 +712,8 @@
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <div class="year-tabs">
-        <button class="tab-btn active" onclick="switchView('114')">114年度</button>
-        <button class="tab-btn" onclick="switchView('115')">115年度</button>
-        <button class="tab-btn" onclick="switchView('all')">全年比較</button>
-        <button class="tab-btn" onclick="switchView('db')" id="db-tab">🗄 資料庫</button>
+      <div class="year-tabs" id="main-tabs">
+        <!-- Dynamically populated by JS -->
       </div>
       <button id="refresh-btn" onclick="fetchGoogleSheet()">
         <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -735,7 +732,11 @@
 <div class="main">
   <div id="kpi-row" class="kpi-row"></div>
 
-
+  <!-- Sub-filter bar: only visible in "all" mode -->
+  <div id="all-year-sub-bar" style="display:none;margin-bottom:20px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);display:none;flex-wrap:wrap;align-items:center;gap:10px;">
+    <span style="font-size:12px;color:var(--text2);white-space:nowrap;">顯示年度：</span>
+    <div class="filter-group" id="all-year-chips"></div>
+  </div>
 
   <div class="charts-grid">
     <div class="chart-card full">
@@ -921,11 +922,13 @@
 </div>
 
 <script>
+/* ════════════════════════════════════════════════════════
+   RAW data  — supports arbitrary year keys
+════════════════════════════════════════════════════════ */
 const RAW = {
   "114": {
     months: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
     "1F": {
-      // [A,B,C] per month index 0=1月 … 11=12月
       Mon: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[1,1,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]],
       Tue: [[1,1,2],[1,0,1],[2,1,1],[2,2,3],[2,2,3],[4,4,1],[4,4,0],[3,3,2],[3,3,3],[0,0,1],[3,3,2],[3,3,2]],
       Wed: [[1,2,1],[0,0,1],[2,1,1],[0,0,1],[2,2,1],[2,2,0],[4,4,1],[2,4,1],[3,3,2],[2,3,1],[3,3,1],[2,1,2]],
@@ -973,18 +976,87 @@ const PERIODS = ["A","B","C"];
 const PERIOD_COLORS = ["#58a6ff","#3fb950","#d29922"];
 const PERIOD_BG = ["rgba(88,166,255,0.15)","rgba(63,185,80,0.15)","rgba(210,153,34,0.15)"];
 
-let currentYear = "114";
-let currentFloor = "all";
+// ── Dynamic year helpers ──────────────────────────────────
+// ROC year: Western year - 1911
+function getRocYear(westernYear) { return westernYear - 1911; }
+function getCurrentRocYear()    { return getRocYear(new Date().getFullYear()); }
+
+// All year keys present in RAW (sorted ascending)
+function getAllYears() { return Object.keys(RAW).sort(); }
+
+// The two years that always appear in main tabs: thisYear and lastYear (ROC)
+function getMainTabYears() {
+  const thisY = String(getCurrentRocYear());
+  const lastY = String(getCurrentRocYear() - 1);
+  const available = getAllYears();
+  // Show these if they exist in RAW; if not, fall back to the two most-recent years
+  const out = [];
+  if (available.includes(lastY)) out.push(lastY);
+  if (available.includes(thisY)) out.push(thisY);
+  // Fill up to 2 from available if needed
+  if (out.length < 2) {
+    available.slice(-2).forEach(y => { if (!out.includes(y)) out.push(y); });
+  }
+  return out.slice(-2).sort();
+}
+
+let currentYear  = getMainTabYears()[1] || getAllYears().slice(-1)[0]; // default: most recent
+let allSubYear   = "all";   // sub-filter when currentYear === "all": "all" | specific year
+let currentFloor  = "all";
 let currentPeriod = "all";
 let charts = {};
 
-function getYearData(year) {
-  if (year === "all") return null;
-  return RAW[year];
+// ── Build / update main tabs ──────────────────────────────
+function buildMainTabs() {
+  const mainTabYears = getMainTabYears();
+  const isDashboard = currentYear !== 'db';
+  const container = document.getElementById('main-tabs');
+  let html = '';
+  mainTabYears.forEach(y => {
+    const active = (isDashboard && currentYear === y) ? ' active' : '';
+    html += `<button class="tab-btn${active}" onclick="switchView('${y}')">${y}年度</button>`;
+  });
+  // "全年比較" always present
+  const allActive = (isDashboard && currentYear === 'all') ? ' active' : '';
+  html += `<button class="tab-btn${allActive}" onclick="switchView('all')">全年比較</button>`;
+  const dbActive = currentYear === 'db' ? ' active' : '';
+  html += `<button class="tab-btn${dbActive}" onclick="switchView('db')" id="db-tab">🗄 資料庫</button>`;
+  container.innerHTML = html;
 }
 
+// ── Build sub-year-filter chips (shown only in "all" mode) ──
+function buildAllYearSubBar() {
+  const bar = document.getElementById('all-year-sub-bar');
+  if (currentYear !== 'all') {
+    bar.style.display = 'none';
+    return;
+  }
+  bar.style.display = 'flex';
+  const years = getAllYears();
+  let html = `<button class="filter-chip ${allSubYear==='all'?'active':''}" onclick="setAllSubYear('all')">全年度</button>`;
+  years.forEach(y => {
+    html += `<button class="filter-chip ${allSubYear===y?'active':''}" onclick="setAllSubYear('${y}')">${y}年度</button>`;
+  });
+  document.getElementById('all-year-chips').innerHTML = html;
+}
+
+function setAllSubYear(y) {
+  allSubYear = y;
+  renderAll(); // renderAll calls buildAllYearSubBar internally
+}
+
+// Effective years for data aggregation
+function getEffectiveYears() {
+  if (currentYear !== 'all') return [currentYear];
+  if (allSubYear !== 'all') return [allSubYear];
+  return getAllYears();
+}
+
+// First available year key (for months reference)
+function getFirstYear() { return getAllYears()[0] || "114"; }
+
 function aggregateMonthly(year, floor, period) {
-  const yrs = year === "all" ? ["114","115"] : [year];
+  const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
   const periods = period === "all" ? [0,1,2] : [["A","B","C"].indexOf(period)];
   const result = {};
@@ -992,7 +1064,7 @@ function aggregateMonthly(year, floor, period) {
     result[y] = Array(12).fill(0);
     floors.forEach(f => {
       DAYS.forEach(d => {
-        RAW[y][f][d].forEach((abc, mi) => {
+        (RAW[y]?.[f]?.[d] || []).forEach((abc, mi) => {
           periods.forEach(p => { result[y][mi] += abc[p]; });
         });
       });
@@ -1002,7 +1074,7 @@ function aggregateMonthly(year, floor, period) {
 }
 
 function aggregateWeekday(year, floor, period) {
-  const yrs = year === "all" ? ["114","115"] : [year];
+  const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
   const periods = period === "all" ? [0,1,2] : [["A","B","C"].indexOf(period)];
   const result = {};
@@ -1010,7 +1082,7 @@ function aggregateWeekday(year, floor, period) {
     result[y] = DAYS.map(() => 0);
     floors.forEach(f => {
       DAYS.forEach((d, di) => {
-        RAW[y][f][d].forEach(abc => {
+        (RAW[y]?.[f]?.[d] || []).forEach(abc => {
           periods.forEach(p => { result[y][di] += abc[p]; });
         });
       });
@@ -1020,13 +1092,13 @@ function aggregateWeekday(year, floor, period) {
 }
 
 function aggregatePeriod(year, floor) {
-  const yrs = year === "all" ? ["114","115"] : [year];
+  const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
   const totals = [0,0,0];
   yrs.forEach(y => {
     floors.forEach(f => {
       DAYS.forEach(d => {
-        RAW[y][f][d].forEach(abc => {
+        (RAW[y]?.[f]?.[d] || []).forEach(abc => {
           abc.forEach((v, pi) => { totals[pi] += v; });
         });
       });
@@ -1036,27 +1108,27 @@ function aggregatePeriod(year, floor) {
 }
 
 function aggregateFloorMonth(year, period) {
-  const yrs = year === "all" ? ["114","115"] : [year];
+  const yrs = getEffectiveYears();
   const periods = period === "all" ? [0,1,2] : [["A","B","C"].indexOf(period)];
   const f1 = Array(12).fill(0), f2 = Array(12).fill(0);
   yrs.forEach(y => {
     DAYS.forEach(d => {
-      RAW[y]["1F"][d].forEach((abc, mi) => { periods.forEach(p => { f1[mi] += abc[p]; }); });
-      RAW[y]["2F"][d].forEach((abc, mi) => { periods.forEach(p => { f2[mi] += abc[p]; }); });
+      (RAW[y]?.["1F"]?.[d] || []).forEach((abc, mi) => { periods.forEach(p => { f1[mi] += abc[p]; }); });
+      (RAW[y]?.["2F"]?.[d] || []).forEach((abc, mi) => { periods.forEach(p => { f2[mi] += abc[p]; }); });
     });
   });
   return {f1, f2};
 }
 
 function getHeatmapData(year, floor, period) {
-  const yrs = year === "all" ? ["114","115"] : [year];
+  const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
   const periods = period === "all" ? [0,1,2] : [["A","B","C"].indexOf(period)];
   const grid = DAYS.map(() => Array(12).fill(0));
   yrs.forEach(y => {
     floors.forEach(f => {
       DAYS.forEach((d, di) => {
-        RAW[y][f][d].forEach((abc, mi) => {
+        (RAW[y]?.[f]?.[d] || []).forEach((abc, mi) => {
           periods.forEach(p => { grid[di][mi] += abc[p]; });
         });
       });
@@ -1067,19 +1139,14 @@ function getHeatmapData(year, floor, period) {
 
 function getTotals(year, floor, period) {
   const monthly = aggregateMonthly(year, floor, period);
+  const yrs = getEffectiveYears();
+  const months = RAW[getFirstYear()].months;
   let total = 0, peak = 0, peakMonth = "";
-  const months = RAW["114"].months;
-  if (year === "all") {
-    for (let mi = 0; mi < 12; mi++) {
-      const v = (monthly["114"][mi] || 0) + (monthly["115"][mi] || 0);
-      total += v;
-      if (v > peak) { peak = v; peakMonth = months[mi]; }
-    }
-  } else {
-    monthly[year].forEach((v, mi) => {
-      total += v;
-      if (v > peak) { peak = v; peakMonth = months[mi]; }
-    });
+  for (let mi = 0; mi < 12; mi++) {
+    let v = 0;
+    yrs.forEach(y => { v += (monthly[y]?.[mi] || 0); });
+    total += v;
+    if (v > peak) { peak = v; peakMonth = months[mi]; }
   }
   return {total, peak, peakMonth};
 }
@@ -1094,21 +1161,26 @@ function renderKPI() {
   const pTotal = pData.reduce((a,b)=>a+b,0);
   const topPeriod = ["A","B","C"][pData.indexOf(Math.max(...pData))];
   const topPeriodPct = pTotal ? Math.round(Math.max(...pData)/pTotal*100) : 0;
-  const months = RAW["114"].months;
+  const months = RAW[getFirstYear()].months;
   const monthly = aggregateMonthly(y, currentFloor, currentPeriod);
+  const yrs = getEffectiveYears();
   let hasData = 0;
-  if (y === "all") {
-    for (let mi = 0; mi < 12; mi++) { if ((monthly["114"][mi]||0)+(monthly["115"][mi]||0)>0) hasData++; }
-  } else {
-    hasData = monthly[y].filter(v=>v>0).length;
+  for (let mi = 0; mi < 12; mi++) {
+    let v = 0; yrs.forEach(yr => { v += (monthly[yr]?.[mi]||0); });
+    if (v > 0) hasData++;
   }
   const avg = hasData ? Math.round(total/hasData) : 0;
+
+  // Label for KPI footer
+  const yrsLabel = y === "all"
+    ? (allSubYear !== "all" ? `${allSubYear}年度` : `${getAllYears().join('–')}年累計`)
+    : `${y}年度合計`;
 
   document.getElementById("kpi-row").innerHTML = `
     <div class="kpi-card blue">
       <div class="kpi-label">總使用場次</div>
       <div class="kpi-val">${total}<span class="kpi-unit">場</span></div>
-      <div class="kpi-trend">${y === "all" ? "114–115年累計" : y+"年度合計"}</div>
+      <div class="kpi-trend">${yrsLabel}</div>
     </div>
     <div class="kpi-card green">
       <div class="kpi-label">月均場次</div>
@@ -1139,22 +1211,23 @@ function destroyChart(id) {
 
 function renderMonthlyChart() {
   destroyChart("monthly");
-  const y = currentYear;
-  const monthly = aggregateMonthly(y, currentFloor, currentPeriod);
-  const months = RAW["114"].months;
+  const monthly = aggregateMonthly(currentYear, currentFloor, currentPeriod);
+  const months = RAW[getFirstYear()].months;
   const legendEl = document.getElementById("monthly-legend");
+  const yrs = getEffectiveYears();
+  const palette = ["#58a6ff","#3fb950","#d29922","#bc8cff","#f78166"];
   let datasets = [];
 
-  if (y === "all") {
-    datasets = [
-      { label: "114年", data: monthly["114"], borderColor: "#58a6ff", backgroundColor: "rgba(88,166,255,0.15)", fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2 },
-      { label: "115年", data: monthly["115"], borderColor: "#3fb950", backgroundColor: "rgba(63,185,80,0.1)", fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2, borderDash: [5,3] }
-    ];
-    legendEl.innerHTML = `
-      <div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div>114年</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#3fb950"></div>115年</div>
-    `;
+  if (yrs.length > 1) {
+    datasets = yrs.map((y, i) => ({
+      label: y+"年", data: monthly[y],
+      borderColor: palette[i % palette.length],
+      backgroundColor: palette[i % palette.length].replace(')',',0.12)').replace('rgb','rgba'),
+      fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2
+    }));
+    legendEl.innerHTML = yrs.map((y,i) => `<div class="legend-item"><div class="legend-dot" style="background:${palette[i%palette.length]}"></div>${y}年</div>`).join('');
   } else {
+    const y = yrs[0];
     datasets = [{ label: y+"年", data: monthly[y], borderColor: "#58a6ff", backgroundColor: "rgba(88,166,255,0.12)", fill: true, tension: 0.4, pointRadius: 5, pointHoverRadius: 7, borderWidth: 2.5 }];
     legendEl.innerHTML = `<div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div>${y}年</div>`;
   }
@@ -1175,16 +1248,15 @@ function renderMonthlyChart() {
 
 function renderWeekdayChart() {
   destroyChart("weekday");
-  const y = currentYear;
-  const wd = aggregateWeekday(y, currentFloor, currentPeriod);
+  const wd = aggregateWeekday(currentYear, currentFloor, currentPeriod);
   const labels = ["週一(休館)","週二","週三","週四","週五","週六","週日"];
+  const yrs = getEffectiveYears();
+  const palette = ["#58a6ff","#3fb950","#d29922","#bc8cff","#f78166"];
   let datasets = [];
-  if (y === "all") {
-    datasets = [
-      { label: "114年", data: wd["114"], backgroundColor: "#58a6ff", borderRadius: 4 },
-      { label: "115年", data: wd["115"], backgroundColor: "#3fb950", borderRadius: 4 }
-    ];
+  if (yrs.length > 1) {
+    datasets = yrs.map((y, i) => ({ label: y+"年", data: wd[y], backgroundColor: palette[i%palette.length], borderRadius: 4 }));
   } else {
+    const y = yrs[0];
     datasets = [{ label: y+"年", data: wd[y], backgroundColor: labels.map((_, i) => i === 0 ? "rgba(255,255,255,0.1)" : "#58a6ff"), borderRadius: 4 }];
   }
   charts["weekday"] = new Chart(document.getElementById("weekdayChart"), {
@@ -1192,7 +1264,7 @@ function renderWeekdayChart() {
     data: { labels, datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: y === "all", labels: { color: "#8b949e", boxWidth: 12, font: { size: 11 } } }, tooltip: { backgroundColor: "#21262d", titleColor: "#e6edf3", bodyColor: "#8b949e", borderColor: "#30363d", borderWidth: 1 } },
+      plugins: { legend: { display: yrs.length > 1, labels: { color: "#8b949e", boxWidth: 12, font: { size: 11 } } }, tooltip: { backgroundColor: "#21262d", titleColor: "#e6edf3", bodyColor: "#8b949e", borderColor: "#30363d", borderWidth: 1 } },
       scales: {
         x: { grid: { display: false }, ticks: { color: "#8b949e", font: { size: 11 }, maxRotation: 30 } },
         y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#8b949e", font: { size: 12 } }, beginAtZero: true }
@@ -1223,7 +1295,7 @@ function renderPeriodChart() {
 
 function renderFloorChart() {
   destroyChart("floorComp");
-  const months = RAW["114"].months;
+  const months = RAW[getFirstYear()].months;
   const fd = aggregateFloorMonth(currentYear, currentPeriod);
   charts["floorComp"] = new Chart(document.getElementById("floorCompChart"), {
     type: "bar",
@@ -1246,8 +1318,8 @@ function renderFloorChart() {
 }
 
 function renderHeatmap() {
-  const yrs = currentYear === "all" ? ["114","115"] : [currentYear];
-  const months = RAW["114"].months;
+  const yrs = getEffectiveYears();
+  const months = RAW[getFirstYear()].months;
   const activeFloors = currentFloor === "all" ? ["1F","2F"] : [currentFloor];
   const periods = currentPeriod === "all" ? [0,1,2] : [["A","B","C"].indexOf(currentPeriod)];
   const ACTIVE_DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
@@ -1285,7 +1357,10 @@ function renderHeatmap() {
     return                { bg: `rgba(140,210,255,0.95)`,       fg: "#0d2040" };
   }
 
-  const titleLabel = currentYear === "all" ? "114–115年全年" : currentYear+"年全年";
+  const allYrs = getAllYears();
+  const titleLabel = (currentYear === "all" && allSubYear === "all")
+    ? (allYrs.join('–') + "年全年")
+    : ((allSubYear !== "all" ? allSubYear : currentYear) + "年全年");
   const floorLabel = currentFloor === "all" ? "（1F+2F）" : `（${currentFloor}）`;
 
   let html = `<div class="hm-table-wrap">
@@ -1344,29 +1419,33 @@ function renderHeatmap() {
 
 function renderDetailTable() {
   const y = currentYear;
-  const months = RAW["114"].months;
+  const months = RAW[getFirstYear()].months;
   const fd = aggregateFloorMonth(y, currentPeriod);
   const monthly = aggregateMonthly(y, currentFloor, currentPeriod);
+  const yrs = getEffectiveYears();
   let rows = "";
   months.forEach((m, mi) => {
     const total1 = fd.f1[mi], total2 = fd.f2[mi];
     const total = currentFloor === "all" ? total1 + total2 : (currentFloor === "1F" ? total1 : total2);
-    if (y === "all") {
-      const t1 = (monthly["114"]||Array(12).fill(0))[mi] || 0;
-      const t2 = (monthly["115"]||Array(12).fill(0))[mi] || 0;
-      const combined = t1 + t2;
-      rows += `<tr><td>${m}</td><td class="mono"><span class="tag tag-1f">${t1}</span></td><td class="mono"><span class="tag" style="background:rgba(63,185,80,0.15);color:var(--accent2)">${t2}</span></td><td class="mono" style="font-weight:600;color:var(--text)">${combined}</td></tr>`;
+    if (y === "all" && yrs.length > 1) {
+      const palette = ["#58a6ff","#3fb950","#d29922","#bc8cff","#f78166"];
+      const cells = yrs.map((yr,i) => `<td class="mono"><span class="tag" style="background:${palette[i%palette.length]}22;color:${palette[i%palette.length]}">${monthly[yr]?.[mi]||0}</span></td>`).join('');
+      const combined = yrs.reduce((s,yr) => s + (monthly[yr]?.[mi]||0), 0);
+      rows += `<tr><td>${m}</td>${cells}<td class="mono" style="font-weight:600;color:var(--text)">${combined}</td></tr>`;
     } else {
       rows += `<tr><td>${m}</td><td class="mono"><span class="tag tag-1f">${total1}</span></td><td class="mono"><span class="tag tag-2f">${total2}</span></td><td class="mono" style="font-weight:600;color:var(--text)">${total1+total2}</td></tr>`;
     }
   });
-  const header = y === "all"
-    ? `<tr><th>月份</th><th>114年</th><th>115年</th><th>合計</th></tr>`
+  const palette = ["#58a6ff","#3fb950","#d29922","#bc8cff","#f78166"];
+  const header = (y === "all" && yrs.length > 1)
+    ? `<tr><th>月份</th>${yrs.map((yr,i)=>`<th style="color:${palette[i%palette.length]}">${yr}年</th>`).join('')}<th>合計</th></tr>`
     : `<tr><th>月份</th><th>1F</th><th>2F</th><th>合計</th></tr>`;
   document.getElementById("detail-table").innerHTML = `<table class="data-table"><thead>${header}</thead><tbody>${rows}</tbody></table>`;
 }
 
 function renderAll() {
+  buildMainTabs();
+  buildAllYearSubBar();
   renderKPI();
   renderMonthlyChart();
   renderWeekdayChart();
@@ -1378,9 +1457,7 @@ function renderAll() {
 
 function switchYear(y) {
   currentYear = y;
-  document.querySelectorAll(".tab-btn").forEach((b, i) => {
-    b.classList.toggle("active", ["114","115","all","db"][i] === y);
-  });
+  if (y !== 'all') allSubYear = 'all'; // reset sub-filter when leaving "all" mode
   renderAll();
 }
 
@@ -1535,8 +1612,10 @@ function parseSheetRows(rows, year, lookup) {
 }
 
 function buildRAWFromLookup(lookup) {
-  const raw = { "114":{ months:ML }, "115":{ months:ML } };
-  ["114","115"].forEach(y => {
+  const years = Object.keys(lookup);
+  const raw = {};
+  years.forEach(y => {
+    raw[y] = { months: ML };
     ["1F","2F"].forEach(f => {
       raw[y][f] = {};
       DK.forEach(d => {
@@ -1552,9 +1631,11 @@ function buildRAWFromLookup(lookup) {
 
 function countTotal(raw) {
   let t = 0;
-  ["114","115"].forEach(y => ["1F","2F"].forEach(f => DK.forEach(d =>
-    raw[y][f][d].forEach(abc => abc.forEach(v => t += v))
-  )));
+  Object.keys(raw).forEach(y =>
+    ["1F","2F"].forEach(f => DK.forEach(d =>
+      (raw[y]?.[f]?.[d] || []).forEach(abc => abc.forEach(v => t += v))
+    ))
+  );
   return t;
 }
 
@@ -1656,7 +1737,10 @@ async function fetchGoogleSheet() {
       throw new Error('回傳資料為空，請重新部署 Apps Script');
     }
 
-    const lookup = { "114":{}, "115":{} };
+    // Build lookup dynamically from SHEET_CFG
+    const years = [...new Set(SHEET_CFG.map(s => s.year))];
+    const lookup = {};
+    years.forEach(y => { lookup[y] = {}; });
     let foundSheets = 0;
 
     SHEET_CFG.forEach(s => {
@@ -1721,13 +1805,13 @@ function switchView(v) {
   const isDash = v !== 'db';
   document.getElementById('dashboard-page').classList.toggle('hidden', !isDash);
   document.getElementById('db-page').classList.toggle('active', !isDash);
-  document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    b.classList.toggle('active', ['114','115','all','db'][i] === v);
-  });
   if (isDash) {
     currentYear = v;
-    renderAll();
+    if (v !== 'all') allSubYear = 'all';
+    renderAll(); // rebuilds tabs inside
   } else {
+    currentYear = 'db';
+    buildMainTabs(); // update active state on db tab
     renderDbPage();
   }
 }
