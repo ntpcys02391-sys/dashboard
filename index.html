@@ -407,7 +407,7 @@
     .kpi-row { grid-template-columns: repeat(2, 1fr); }
     .heatmap-grid { font-size: 10px; }
   }
- 
+
   /* ── Refresh Button ── */
   #refresh-btn {
     display: flex; align-items: center; gap: 7px;
@@ -428,7 +428,7 @@
   #last-update-tag { font-size: 11px; color: var(--text3); white-space: nowrap; transition: color 0.3s; }
   #last-update-tag.ok  { color: #3fb950; }
   #last-update-tag.err { color: #f78166; }
- 
+
   /* ── Database Page ── */
   #db-page { display: none; }
   #db-page.active { display: block; }
@@ -490,7 +490,7 @@
     .db-log-time { display: none; }
     .db-log-total { display: none; }
   }
- 
+
   /* Upload overlay */
   #upload-overlay {
     display: none;
@@ -739,7 +739,7 @@
 </style>
 </head>
 <body>
- 
+
 <div class="header">
   <div class="header-inner">
     <div class="header-title">
@@ -765,17 +765,17 @@
     </div>
   </div>
 </div>
- 
+
 <div id="dashboard-page">
 <div class="main">
   <div id="kpi-row" class="kpi-row"></div>
- 
+
   <!-- Sub-filter bar: only visible in "all" mode -->
   <div id="all-year-sub-bar" style="display:none;margin-bottom:20px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);display:none;flex-wrap:wrap;align-items:center;gap:10px;">
     <span style="font-size:12px;color:var(--text2);white-space:nowrap;">顯示年度：</span>
     <div class="filter-group" id="all-year-chips"></div>
   </div>
- 
+
   <div class="charts-grid">
     <div class="chart-card full">
       <div class="chart-header">
@@ -812,7 +812,7 @@
       </div>
     </div>
   </div>
- 
+
   <div class="charts-grid">
     <div class="chart-card full">
       <div class="chart-header">
@@ -824,7 +824,7 @@
       <div id="heatmap-container"></div>
     </div>
   </div>
- 
+
   <div class="compare-row">
     <div class="chart-card">
       <div class="chart-header">
@@ -852,12 +852,12 @@
     </div>
   </div>
 </div>
- 
+
 <div class="footer-note">
   青職基地 場租使用分析儀表板 ｜ 資料來源：Google Sheet 自動同步 ｜ 週一固定休館
 </div>
 </div><!-- /dashboard-page -->
- 
+
 <!-- ── Database Page ── -->
 <div id="db-page" class="main">
   <div class="db-header">
@@ -867,7 +867,7 @@
     </div>
     <button onclick="clearDbLog()" style="padding:6px 14px;background:rgba(247,129,102,0.1);border:1px solid rgba(247,129,102,0.3);border-radius:8px;color:#f78166;font-size:12px;font-family:'Noto Sans TC',sans-serif;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='rgba(247,129,102,0.2)'" onmouseout="this.style.background='rgba(247,129,102,0.1)'">清除紀錄</button>
   </div>
- 
+
   <!-- Summary stats -->
   <div class="db-stats-row" id="db-stats-row">
     <div class="db-stat-card"><div class="db-stat-label">總更新次數</div><div class="db-stat-val" id="db-stat-total">0</div><div class="db-stat-sub">自啟動以來</div></div>
@@ -875,7 +875,7 @@
     <div class="db-stat-card"><div class="db-stat-label">失敗次數</div><div class="db-stat-val" style="color:#f78166" id="db-stat-err">0</div><div class="db-stat-sub">連線或解析錯誤</div></div>
     <div class="db-stat-card"><div class="db-stat-label">最後更新</div><div class="db-stat-val" style="font-size:14px" id="db-stat-last">—</div><div class="db-stat-sub" id="db-stat-last-sub">尚未更新</div></div>
   </div>
- 
+
   <!-- Log table -->
   <div class="db-log-card">
     <div class="db-log-card-header">
@@ -893,17 +893,17 @@
       <div class="db-log-empty">尚無同步紀錄，點「更新資料」開始</div>
     </div>
   </div>
- 
+
   <!-- Data source -->
   <div class="db-source-box">
     <div class="db-source-label">📡 資料來源</div>
     <div class="db-source-url" id="db-source-url"></div>
   </div>
 </div>
- 
+
 <!-- ── Floating Filter Button ── -->
 <div id="float-filter-wrap">
- 
+
   <div id="float-panel" role="menu" aria-label="篩選面板">
     <!-- Panel header -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -913,7 +913,7 @@
       </div>
       <button id="fp-reset" onclick="fpReset()" style="font-size:11px;color:#8b949e;background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px;font-family:'Noto Sans TC',sans-serif;transition:color 0.15s" onmouseover="this.style.color='#e6edf3'" onmouseout="this.style.color='#8b949e'">重置</button>
     </div>
- 
+
     <!-- 樓層 -->
     <div class="fp-section-label">🏢 樓層</div>
     <div class="fp-chips">
@@ -921,7 +921,7 @@
       <button class="fp-chip"                  data-floor="1F"   onclick="fpFloor('1F')" >1F</button>
       <button class="fp-chip"                  data-floor="2F"   onclick="fpFloor('2F')" >2F</button>
     </div>
- 
+
     <!-- 時段 -->
     <div class="fp-section-label" style="margin-top:14px">⏰ 時段</div>
     <div class="fp-chips">
@@ -930,7 +930,7 @@
       <button class="fp-chip"                   data-period="B"   onclick="fpPeriod('B')">B 段</button>
       <button class="fp-chip"                   data-period="C"   onclick="fpPeriod('C')">C 段</button>
     </div>
- 
+
     <!-- 時段說明 -->
     <div style="margin-top:10px;display:flex;flex-direction:column;gap:3px">
       <div style="font-size:10px;color:rgba(139,148,158,0.55);line-height:1.6">
@@ -939,9 +939,9 @@
         <span style="color:rgba(210,153,34,0.7)">C</span> 17:30–20:30
       </div>
     </div>
- 
+
     <div class="fp-divider"></div>
- 
+
     <!-- 目前狀態 -->
     <div class="fp-status" id="fp-status-row">
       <span style="color:rgba(139,148,158,0.5);font-size:11px">目前：</span>
@@ -949,7 +949,7 @@
       <span class="fp-status-tag" id="fp-tag-period" style="background:rgba(139,148,158,0.1);color:#8b949e">全部時段</span>
     </div>
   </div>
- 
+
   <!-- FAB button -->
   <button id="float-btn" aria-label="開啟篩選面板">
     <div class="fp-badge hidden" id="fp-badge">0</div>
@@ -958,7 +958,7 @@
     </svg>
   </button>
 </div>
- 
+
 <script>
 /* ════════════════════════════════════════════════════════
    RAW data  — supports arbitrary year keys
@@ -1007,21 +1007,21 @@ const RAW = {
     }
   }
 };
- 
+
 const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const DAY_LABELS = ["週一(休館)","週二","週三","週四","週五","週六","週日"];
 const PERIODS = ["A","B","C"];
 const PERIOD_COLORS = ["#58a6ff","#3fb950","#d29922"];
 const PERIOD_BG = ["rgba(88,166,255,0.15)","rgba(63,185,80,0.15)","rgba(210,153,34,0.15)"];
- 
+
 // ── Dynamic year helpers ──────────────────────────────────
 // ROC year: Western year - 1911
 function getRocYear(westernYear) { return westernYear - 1911; }
 function getCurrentRocYear()    { return getRocYear(new Date().getFullYear()); }
- 
+
 // All year keys present in RAW (sorted ascending)
 function getAllYears() { return Object.keys(RAW).sort(); }
- 
+
 // The two years that always appear in main tabs: thisYear and lastYear (ROC)
 function getMainTabYears() {
   const thisY = String(getCurrentRocYear());
@@ -1037,14 +1037,14 @@ function getMainTabYears() {
   }
   return out.slice(-2).sort();
 }
- 
+
 let currentYear  = getMainTabYears()[1] || getAllYears().slice(-1)[0]; // default: most recent
 // allSubYears: Set of selected year strings when in "all" mode. Empty set = all years selected.
 let allSubYears  = new Set();   // empty = all years (全年度)
 let currentFloor  = "all";
 let currentPeriod = "all";
 let charts = {};
- 
+
 // ── Build / update main tabs ──────────────────────────────
 function buildMainTabs() {
   const mainTabYears = getMainTabYears();
@@ -1061,7 +1061,7 @@ function buildMainTabs() {
   const dbActive = currentYear === 'db' ? ' active' : '';
   html += `<button class="tab-btn${dbActive}" onclick="switchView('db')" id="db-tab">🗄 資料庫</button>`;
   container.innerHTML = html;
- 
+
   // 更新 header 副標題年度範圍
   const allYrs = getAllYears();
   const yearRange = allYrs.length > 1
@@ -1070,7 +1070,7 @@ function buildMainTabs() {
   const subEl = document.getElementById('header-sub');
   if (subEl) subEl.textContent = `${yearRange} 場地租賃紀錄分析 ｜ 時段 A: 10:30–13:30 ｜ B: 14:00–17:00 ｜ C: 17:30–20:30`;
 }
- 
+
 // ── Build sub-year-filter chips (shown only in "all" mode, multi-select) ──
 function buildAllYearSubBar() {
   const bar = document.getElementById('all-year-sub-bar');
@@ -1081,7 +1081,7 @@ function buildAllYearSubBar() {
   bar.style.display = 'flex';
   const years = getAllYears();
   const allSelected = allSubYears.size === 0; // empty = 全年度
- 
+
   let html = `<button class="filter-chip ${allSelected ? 'active' : ''}" onclick="toggleAllSubYear('__all__')" style="margin-right:4px">全年度</button>`;
   years.forEach(y => {
     const sel = !allSelected && allSubYears.has(y);
@@ -1089,7 +1089,7 @@ function buildAllYearSubBar() {
   });
   document.getElementById('all-year-chips').innerHTML = html;
 }
- 
+
 function toggleAllSubYear(y) {
   if (y === '__all__') {
     allSubYears.clear(); // 全年度 = 清空選擇
@@ -1103,25 +1103,25 @@ function toggleAllSubYear(y) {
   }
   renderAll();
 }
- 
+
 // Keep backward compat for old allSubYear references in switchView
 let allSubYear = "all"; // legacy, not used for logic below
- 
+
 // Effective years for data aggregation
 function getEffectiveYears() {
   if (currentYear !== 'all') return [currentYear];
   if (allSubYears.size > 0) return getAllYears().filter(y => allSubYears.has(y));
   return getAllYears();
 }
- 
+
 // Returns true ONLY when user explicitly selected 2+ individual years (not 全年度)
 function isCompareMode() {
   return currentYear === 'all' && allSubYears.size >= 2;
 }
- 
+
 // First available year key (for months reference)
 function getFirstYear() { return getAllYears()[0] || "114"; }
- 
+
 function aggregateMonthly(year, floor, period) {
   const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
@@ -1139,7 +1139,7 @@ function aggregateMonthly(year, floor, period) {
   });
   return result;
 }
- 
+
 function aggregateWeekday(year, floor, period) {
   const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
@@ -1157,7 +1157,7 @@ function aggregateWeekday(year, floor, period) {
   });
   return result;
 }
- 
+
 function aggregatePeriod(year, floor) {
   const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
@@ -1173,7 +1173,7 @@ function aggregatePeriod(year, floor) {
   });
   return totals;
 }
- 
+
 function aggregateFloorMonth(year, period) {
   const yrs = getEffectiveYears();
   const periods = period === "all" ? [0,1,2] : [["A","B","C"].indexOf(period)];
@@ -1186,7 +1186,7 @@ function aggregateFloorMonth(year, period) {
   });
   return {f1, f2};
 }
- 
+
 function getHeatmapData(year, floor, period) {
   const yrs = getEffectiveYears();
   const floors = floor === "all" ? ["1F","2F"] : [floor];
@@ -1203,7 +1203,7 @@ function getHeatmapData(year, floor, period) {
   });
   return grid;
 }
- 
+
 function getTotals(year, floor, period) {
   const monthly = aggregateMonthly(year, floor, period);
   const yrs = getEffectiveYears();
@@ -1217,15 +1217,15 @@ function getTotals(year, floor, period) {
   }
   return {total, peak, peakMonth};
 }
- 
+
 function renderKPI() {
   const y = currentYear;
- 
+
   // In compare mode (2+ years selected): show per-year comparison cards
   if (isCompareMode()) {
     const effYrs = getEffectiveYears();
     const palette = ["#58a6ff","#3fb950","#d29922","#bc8cff","#f78166"];
- 
+
     // Build per-year stats for each selected year
     const perYear = effYrs.map((yr, i) => {
       const color = palette[i % palette.length];
@@ -1242,7 +1242,7 @@ function renderKPI() {
       const months = RAW[getFirstYear()].months;
       monthly.forEach((v, mi) => { total += v; if (v > peak) { peak = v; peakMonth = months[mi]; } if (v > 0) hasData++; });
       const avg = hasData ? Math.round(total / hasData) : 0;
- 
+
       const pData = (() => {
         const floors = currentFloor === "all" ? ["1F","2F"] : [currentFloor];
         const totals = [0,0,0];
@@ -1252,7 +1252,7 @@ function renderKPI() {
       const pTotal = pData.reduce((a,b)=>a+b,0);
       const topPeriod = ["A","B","C"][pData.indexOf(Math.max(...pData))];
       const topPct = pTotal ? Math.round(Math.max(...pData)/pTotal*100) : 0;
- 
+
       const periods2 = currentPeriod === "all" ? [0,1,2] : [["A","B","C"].indexOf(currentPeriod)];
       let f1=0, f2=0;
       DAYS.forEach(d => {
@@ -1260,10 +1260,10 @@ function renderKPI() {
         (RAW[yr]?.["2F"]?.[d]||[]).forEach(abc => { periods2.forEach(p => { f2 += abc[p]; }); });
       });
       const f1pct = (f1+f2) ? Math.round(f1/(f1+f2)*100) : 0;
- 
+
       return { yr, color, total, avg, hasData, peak, peakMonth, topPeriod, topPct, f1pct };
     });
- 
+
     // Render compact side-by-side comparison KPI grid
     const metrics = [
       { label:"總使用場次", cls:"blue",   val: d => `${d.total}<span class="kpi-unit">場</span>`, sub: d => `${d.yr}年度合計` },
@@ -1272,7 +1272,7 @@ function renderKPI() {
       { label:"1F 佔比",   cls:"purple", val: d => `${d.f1pct}<span class="kpi-unit">%</span>`,  sub: d => `1F 場次佔比` },
       { label:"最熱時段",   cls:"coral",  val: d => `<span style="font-size:24px">${d.topPeriod} 段</span>`, sub: d => `佔 ${d.topPct}%` },
     ];
- 
+
     let html = '';
     metrics.forEach(m => {
       html += `<div class="kpi-card ${m.cls}" style="padding:14px 16px">
@@ -1290,7 +1290,7 @@ function renderKPI() {
     document.getElementById("kpi-row").innerHTML = html;
     return;
   }
- 
+
   // Single-year mode (original logic)
   const {total, peak, peakMonth} = getTotals(y, currentFloor, currentPeriod);
   const floorData = aggregateFloorMonth(y, currentPeriod);
@@ -1309,12 +1309,12 @@ function renderKPI() {
     if (v > 0) hasData++;
   }
   const avg = hasData ? Math.round(total/hasData) : 0;
- 
+
   const effYrs2 = getEffectiveYears();
   const yrsLabel = y === "all"
     ? (effYrs2.length === 1 ? `${effYrs2[0]}年度` : `${effYrs2.join('＋')}年累計`)
     : `${y}年度合計`;
- 
+
   document.getElementById("kpi-row").innerHTML = `
     <div class="kpi-card blue">
       <div class="kpi-label">總使用場次</div>
@@ -1343,14 +1343,14 @@ function renderKPI() {
     </div>
   `;
 }
- 
+
 function destroyChart(id) {
   if (charts[id]) { charts[id].destroy(); delete charts[id]; }
 }
- 
+
 // Track which years are hidden in the monthly chart
 let hiddenYears = new Set();
- 
+
 function toggleYearVisibility(year) {
   if (hiddenYears.has(year)) {
     hiddenYears.delete(year);
@@ -1362,12 +1362,12 @@ function toggleYearVisibility(year) {
   }
   updateMonthlyChartVisibility();
 }
- 
+
 function updateMonthlyChartVisibility() {
   const chart = charts["monthly"];
   if (!chart) return;
   const yrs = getEffectiveYears();
- 
+
   // Update chart dataset visibility
   chart.data.datasets.forEach((ds, i) => {
     const y = yrs[i];
@@ -1375,7 +1375,7 @@ function updateMonthlyChartVisibility() {
     ds.hidden = hidden;
   });
   chart.update();
- 
+
   // Update chip states
   document.querySelectorAll('.legend-chip[data-year]').forEach(chip => {
     const y = chip.dataset.year;
@@ -1388,7 +1388,7 @@ function updateMonthlyChartVisibility() {
     }
   });
 }
- 
+
 function renderMonthlyChart() {
   destroyChart("monthly");
   hiddenYears.clear(); // reset hidden state on re-render
@@ -1396,7 +1396,7 @@ function renderMonthlyChart() {
   const months = RAW[getFirstYear()].months;
   const legendEl = document.getElementById("monthly-legend");
   const yrs = getEffectiveYears();
- 
+
   const palette = [
     { line: "#58a6ff", point: "#58a6ff" },
     { line: "#3fb950", point: "#3fb950" },
@@ -1404,9 +1404,9 @@ function renderMonthlyChart() {
     { line: "#bc8cff", point: "#bc8cff" },
     { line: "#f78166", point: "#f78166" },
   ];
- 
+
   let datasets = [];
- 
+
   if (yrs.length > 1) {
     datasets = yrs.map((y, i) => {
       const c = palette[i % palette.length];
@@ -1425,7 +1425,7 @@ function renderMonthlyChart() {
         borderWidth: 2.5,
       };
     });
- 
+
     // Clickable legend chips
     legendEl.innerHTML = yrs.map((y, i) => {
       const c = palette[i % palette.length].line;
@@ -1438,7 +1438,7 @@ function renderMonthlyChart() {
         ${y}年
       </button>`;
     }).join('');
- 
+
   } else {
     const y = yrs[0];
     const canvas = document.getElementById("monthlyChart");
@@ -1463,7 +1463,7 @@ function renderMonthlyChart() {
     }];
     legendEl.innerHTML = `<div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div>${y}年</div>`;
   }
- 
+
   charts["monthly"] = new Chart(document.getElementById("monthlyChart"), {
     type: "line",
     data: { labels: months, datasets },
@@ -1498,7 +1498,7 @@ function renderMonthlyChart() {
     }
   });
 }
- 
+
 function renderWeekdayChart() {
   destroyChart("weekday");
   const wd = aggregateWeekday(currentYear, currentFloor, currentPeriod);
@@ -1525,17 +1525,17 @@ function renderWeekdayChart() {
     }
   });
 }
- 
+
 function renderPeriodChart() {
   destroyChart("period");
- 
+
   // In compare mode (2+ years selected): render side-by-side doughnuts
   if (isCompareMode()) {
     const effYrs = getEffectiveYears();
     const palette = ["#58a6ff","#3fb950","#d29922","#bc8cff","#f78166"];
     const periodColors = ["#58a6ff","#3fb950","#d29922"];
     const periodLabels = ["A 段","B 段","C 段"];
- 
+
     // Get container: either the original canvas's parent, or the existing multi-wrap's parent
     const existingCanvas = document.getElementById("periodChart");
     const existingMulti = document.getElementById("period-multi-wrap");
@@ -1552,7 +1552,7 @@ function renderPeriodChart() {
           <div id="period-legend-${yr}" style="display:flex;flex-direction:column;gap:3px;width:100%"></div>
         </div>`).join('')}
     </div>`;
- 
+
     effYrs.forEach((yr, i) => {
       const pData = (() => {
         const floors = currentFloor === "all" ? ["1F","2F"] : [currentFloor];
@@ -1577,7 +1577,7 @@ function renderPeriodChart() {
         }
       });
       charts[`period_${yr}`] = c;
- 
+
       // Mini legend
       document.getElementById(`period-legend-${yr}`).innerHTML = periodLabels.map((l,pi) =>
         `<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#8b949e">
@@ -1588,7 +1588,7 @@ function renderPeriodChart() {
     });
     return;
   }
- 
+
   // Not compare mode: restore single canvas if it was replaced by multi-wrap
   const multiWrap = document.getElementById("period-multi-wrap");
   if (multiWrap) {
@@ -1596,7 +1596,7 @@ function renderPeriodChart() {
     getAllYears().forEach(yr => { if (charts[`period_${yr}`]) { charts[`period_${yr}`].destroy(); delete charts[`period_${yr}`]; } });
     multiWrap.parentElement.innerHTML = `<canvas id="periodChart" role="img" aria-label="A、B、C時段使用比例圓餅圖" style="width:100%;height:100%">時段資料</canvas>`;
   }
- 
+
   const pData = aggregatePeriod(currentYear, currentFloor);
   const total = pData.reduce((a,b)=>a+b,0);
   charts["period"] = new Chart(document.getElementById("periodChart"), {
@@ -1614,7 +1614,7 @@ function renderPeriodChart() {
     }
   });
 }
- 
+
 function renderFloorChart() {
   destroyChart("floorComp");
   const months = RAW[getFirstYear()].months;
@@ -1638,7 +1638,7 @@ function renderFloorChart() {
     }
   });
 }
- 
+
 function renderHeatmap() {
   // Heatmap: in compare mode, shows all selected years combined; otherwise single year
   const yrs = isCompareMode() ? getEffectiveYears() : getEffectiveYears();
@@ -1647,7 +1647,7 @@ function renderHeatmap() {
   const periods = currentPeriod === "all" ? [0,1,2] : [["A","B","C"].indexOf(currentPeriod)];
   const ACTIVE_DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const ACTIVE_DAY_LABELS = ["週一","週二","週三","週四","週五","週六","週日"];
- 
+
   function getMonthFloorDayVal(yr, floor, mi, d) {
     let sum = 0;
     periods.forEach(p => { sum += RAW[yr][floor][d][mi][p]; });
@@ -1658,7 +1658,7 @@ function renderHeatmap() {
     ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(d => { sum += getMonthFloorDayVal(yr, floor, mi, d); });
     return sum;
   }
- 
+
   let maxVal = 0;
   yrs.forEach(yr => {
     activeFloors.forEach(fl => {
@@ -1670,7 +1670,7 @@ function renderHeatmap() {
       });
     });
   });
- 
+
   function cellBg(val) {
     if (val === 0) return { bg: "rgba(255,255,255,0.05)", fg: "#484f58" };
     const t = maxVal > 0 ? val / maxVal : 0;
@@ -1679,13 +1679,13 @@ function renderHeatmap() {
     if (t < 0.85) return { bg: `rgba(56,168,255,${0.75})`,    fg: "#ffffff" };
     return                { bg: `rgba(140,210,255,0.95)`,       fg: "#0d2040" };
   }
- 
+
   // Heatmap title: show selected years label
   const titleLabel = isCompareMode()
     ? (yrs.join('＋') + "年合計")
     : (yrs[0] + "年全年");
   const floorLabel = currentFloor === "all" ? "（1F+2F）" : `（${currentFloor}）`;
- 
+
   // Update subtitle
   const subtitleEl = document.getElementById("heatmap-subtitle");
   if (subtitleEl) {
@@ -1693,7 +1693,7 @@ function renderHeatmap() {
       ? `各年度加總 ｜ ${yrs.join('＋')}年合計數據`
       : "顏色深淺代表使用頻率（週一固定休館）";
   }
- 
+
   let html = `<div class="hm-table-wrap">
   <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">
     <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle"></span>
@@ -1709,7 +1709,7 @@ function renderHeatmap() {
       </tr>
     </thead>
     <tbody>`;
- 
+
   // In compare mode: collapse selected years into monthly totals (sum across years)
   // In single-year mode: show year's rows as before
   if (isCompareMode()) {
@@ -1724,7 +1724,7 @@ function renderHeatmap() {
       ACTIVE_DAYS.forEach(d => { sum += getCombinedFloorDayVal(floor, mi, d); });
       return sum;
     }
- 
+
     months.forEach((m, mi) => {
       activeFloors.forEach((fl, fi) => {
         const isFirstRow = fi === 0;
@@ -1771,7 +1771,7 @@ function renderHeatmap() {
       });
     });
   }
- 
+
   html += `</tbody></table>
   <div class="hm-legend">
     <span>色階說明：</span>
@@ -1784,7 +1784,7 @@ function renderHeatmap() {
   </div>`;
   document.getElementById("heatmap-container").innerHTML = html;
 }
- 
+
 function renderDetailTable() {
   const y = currentYear;
   const months = RAW[getFirstYear()].months;
@@ -1810,7 +1810,7 @@ function renderDetailTable() {
     : `<tr><th>月份</th><th>1F</th><th>2F</th><th>合計</th></tr>`;
   document.getElementById("detail-table").innerHTML = `<table class="data-table"><thead>${header}</thead><tbody>${rows}</tbody></table>`;
 }
- 
+
 function renderAll() {
   buildMainTabs();
   buildAllYearSubBar();
@@ -1822,27 +1822,27 @@ function renderAll() {
   renderHeatmap();
   renderDetailTable();
 }
- 
+
 function switchYear(y) {
   currentYear = y;
   if (y !== 'all') { allSubYears.clear(); allSubYear = 'all'; }
   renderAll();
 }
- 
+
 function setFloor(f) {
   currentFloor = f;
   renderAll();
   syncFloatPanel();
 }
- 
+
 function setPeriod(p) {
   currentPeriod = p;
   renderAll();
   syncFloatPanel();
 }
- 
+
 renderAll();
- 
+
 /* ── Floating Filter Panel ── */
 function syncFloatPanel() {
   const floorMap   = { all:'all', '1F':'1f', '2F':'2f' };
@@ -1865,11 +1865,11 @@ function syncFloatPanel() {
   badge.textContent = activeCount;
   badge.classList.toggle('hidden', activeCount === 0);
 }
- 
+
 function fpFloor(f)  { setFloor(f); }
 function fpPeriod(p) { setPeriod(p); }
 function fpReset()   { setFloor('all'); setPeriod('all'); }
- 
+
 /* Toggle open/close on button click; close when clicking outside */
 document.getElementById('float-btn').addEventListener('click', e => {
   e.stopPropagation();
@@ -1882,47 +1882,57 @@ document.addEventListener('click', e => {
 });
 /* Keep panel open while interacting inside */
 document.getElementById('float-panel').addEventListener('click', e => e.stopPropagation());
- 
+
 /* ══════════════════════════════════════
    Google Sheet 自動抓取（透過 Apps Script，無 CORS 問題）
 ══════════════════════════════════════ */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjVLeDwyU-3ZjQstCrNd1oF9_zcORLY-J9A4gB58dZKWsATzfk4ZIfqUBxRbimDEvOmQ/exec";
- 
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzh3Q_rIPEQyS93yKJgjI25SgurytUn9bODO1QKxG7EvkNydiyiPq3IVQrFC6fRhttdgA/exec";
+
 // ── 工作表名稱解析年度（自動偵測，不需 SHEET_CFG）──────────
 // 規則：名稱中含有 3 位數字（民國年）即視為有效分頁
 // 例："114年度上半年度1~6月總表" → year:"114"
 //     "115年度下半年7~12月"      → year:"115"
 //     "說明" / "封面" 等         → 忽略
 function detectYearFromSheetName(name) {
-  // 抓 3~4 位連續數字，優先取最前面的三位數（民國年 100~199）
-  const m = name.match(/\b(1\d{2})\b/);
+  // 抓民國年 3 位數（100–119 範圍），移除 \b word boundary（對中文無效）
+  // 優先抓最靠前的三位數字群
+  const m = name.match(/(1[01]\d)/);
   return m ? m[1] : null;
 }
- 
+
 // 自動從 API 回傳的所有分頁中建立 lookup，不需維護 SHEET_CFG
 function buildLookupFromAllSheets(data) {
   const lookup = {};
   let foundSheets = 0;
   const sheetNames = Object.keys(data);
- 
+
+  console.group('📋 工作表掃描結果');
+  console.log('共發現工作表：', sheetNames);
+
   sheetNames.forEach(name => {
     const year = detectYearFromSheetName(name);
     if (!year) {
-      console.info(`跳過不含年度的工作表：${name}`);
+      console.warn(`⏭ 跳過（無法偵測年度）：「${name}」`);
       return;
     }
     const rows = data[name];
-    if (!Array.isArray(rows) || rows.length === 0) return;
- 
+    if (!Array.isArray(rows) || rows.length === 0) {
+      console.warn(`⏭ 跳過（空資料）：「${name}」`);
+      return;
+    }
+
     if (!lookup[year]) lookup[year] = {};
     parseSheetRows(rows, year, lookup);
     foundSheets++;
-    console.info(`✅ 解析工作表：${name} → ${year}年`);
+    console.info(`✅ 解析成功：「${name}」→ ${year}年（${rows.length} 列）`);
   });
- 
+
+  console.log('偵測到年度：', Object.keys(lookup).sort());
+  console.groupEnd();
+
   return { lookup, foundSheets };
 }
- 
+
 const ML  = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
 const DK  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 // Apps Script getValues() 回傳：col[0]=空白, col[1]=月份, col[2]=樓層
@@ -1931,20 +1941,20 @@ const DK  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const DCM = { Mon:3, Tue:6, Wed:9, Thu:12, Fri:15, Sat:18, Sun:21 };
 const COL_MONTH = 1;
 const COL_FLOOR = 2;
- 
+
 // ── DB log store ──
 let dbLog = [];
- 
+
 function fmtTime(d) {
   const p = n => String(n).padStart(2,'0');
   return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
 }
- 
+
 function pushLog(status, msg, total=0) {
   dbLog.unshift({ time: fmtTime(new Date()), status, msg, total });
   renderDbPage();
 }
- 
+
 function renderDbPage() {
   const ok  = dbLog.filter(l => l.status==='ok').length;
   const err = dbLog.filter(l => l.status==='err').length;
@@ -1958,7 +1968,7 @@ function renderDbPage() {
     document.getElementById('db-stat-last-sub').textContent = last.time;
   }
   document.getElementById('db-log-count').textContent = dbLog.length ? `共 ${dbLog.length} 筆` : '';
- 
+
   const body = document.getElementById('db-log-body');
   if (!dbLog.length) {
     body.innerHTML = '<div class="db-log-empty">尚無同步紀錄，點「更新資料」開始</div>';
@@ -1972,20 +1982,21 @@ function renderDbPage() {
       <div class="db-log-total">${l.total ? l.total+' 場' : '—'}</div>
       <div><span class="${l.status==='ok'?'db-badge-ok':'db-badge-err'}">${l.status==='ok'?'成功':'失敗'}</span></div>
     </div>`).join('');
- 
+
   document.getElementById('db-source-url').textContent = APPS_SCRIPT_URL;
 }
- 
+
 function clearDbLog() {
   if (!dbLog.length) return;
   if (!confirm('確定清除所有同步紀錄？')) return;
   dbLog = [];
   renderDbPage();
 }
- 
+
 // ── 把 Apps Script 回傳的 2D array 解析成 RAW ──
 function parseSheetRows(rows, year, lookup) {
   let curMonth = null;
+  let parsedCount = 0;
   for (let r = 0; r < rows.length; r++) {
     const row   = rows[r];
     const col1  = String(row[COL_MONTH] ?? '').trim();
@@ -2004,9 +2015,15 @@ function parseSheetRows(rows, year, lookup) {
         parseInt(row[c+2]) || 0
       ];
     });
+    parsedCount++;
+  }
+  console.log(`  parseSheetRows [${year}年]: 解析到 ${parsedCount} 列(1F+2F)，月份：`, Object.keys(lookup[year]||{}).join('、') || '（無）');
+  if (parsedCount === 0) {
+    console.warn(`  ⚠️ ${year}年 解析結果為空！請確認欄位格式：col[${COL_MONTH}]=月份, col[${COL_FLOOR}]=樓層, 資料從 col[3] 開始`);
+    console.warn(`  前3列原始內容：`, rows.slice(0,3));
   }
 }
- 
+
 function buildRAWFromLookup(lookup) {
   const years = Object.keys(lookup);
   const raw = {};
@@ -2024,7 +2041,7 @@ function buildRAWFromLookup(lookup) {
   });
   return raw;
 }
- 
+
 function countTotal(raw) {
   let t = 0;
   Object.keys(raw).forEach(y =>
@@ -2034,7 +2051,7 @@ function countTotal(raw) {
   );
   return t;
 }
- 
+
 // ── 診斷函數：直接顯示 API 原始回傳 ──
 async function debugFetch() {
   const out = document.getElementById('debug-output') || (() => {
@@ -2048,37 +2065,50 @@ async function debugFetch() {
     document.body.appendChild(d);
     return d;
   })();
- 
+
   out.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:12px">
     <span style="color:#d29922;font-weight:700">🔍 API 診斷</span>
     <button onclick="document.getElementById('debug-output').remove()" style="background:none;border:none;color:#8b949e;cursor:pointer;font-size:16px">✕</button>
   </div><div id="debug-log" style="white-space:pre-wrap;line-height:1.6">正在連線...</div>`;
- 
+
   const log = (msg, color='#e6edf3') => {
     document.getElementById('debug-log').innerHTML += `<span style="color:${color}">${msg}</span>\n`;
   };
- 
+
   try {
     log(`URL: ${APPS_SCRIPT_URL}`, '#58a6ff');
     log('用 JSONP 方式請求（繞過 CORS）...');
- 
+
     const data = await fetchViaJsonp(APPS_SCRIPT_URL);
     log(`\n✅ 成功取得資料！`, '#3fb950');
- 
+
     const keys = Object.keys(data);
     log(`工作表數量: ${keys.length}`, '#3fb950');
+    log(`\n── 各工作表偵測結果 ──`, '#58a6ff');
     keys.forEach(k => {
       const yr = detectYearFromSheetName(k);
-      const tag = yr ? `→ 年度 ${yr}` : `→ 跳過（無年度）`;
-      const color = yr ? '#3fb950' : '#8b949e';
-      log(`  • ${k}（${(data[k]||[]).length} 列）  ${tag}`, color);
+      const rows = (data[k]||[]).length;
+      const tag = yr ? `✅ 年度 ${yr}` : `❌ 無法偵測年度`;
+      const color = yr ? '#3fb950' : '#f78166';
+      log(`  [${tag}]  「${k}」  (${rows} 列)`, color);
     });
- 
+    log(`\n偵測規則：工作表名稱中需含有 100~119 的三位數（民國年）`, '#d29922');
+    log(`例如：113年度總表 ✅ ｜ 114年 ✅ ｜ 說明 ❌ ｜ 封面 ❌`, '#d29922');
+
     if (keys.length > 0) {
-      const firstSheet = data[keys[0]];
-      log(`\n第一個工作表前 8 列：`, '#58a6ff');
-      firstSheet.slice(0, 8).forEach((row, i) => {
-        log(`  row[${i}]: ${JSON.stringify(row).slice(0, 120)}`);
+      // Show first 8 rows of EVERY sheet that has a detected year
+      keys.forEach(k => {
+        const yr = detectYearFromSheetName(k);
+        if (!yr) return;
+        const sheetRows = data[k] || [];
+        log(`\n── 「${k}」(${yr}年) 前 10 列 ──`, '#58a6ff');
+        if (sheetRows.length === 0) {
+          log(`  （空白）`, '#f78166');
+          return;
+        }
+        sheetRows.slice(0, 10).forEach((row, i) => {
+          log(`  row[${i}]: ${JSON.stringify(row).slice(0, 150)}`);
+        });
       });
     }
   } catch(e) {
@@ -2086,7 +2116,7 @@ async function debugFetch() {
     log(`\n可能原因：\n1. CORS 被擋（Apps Script 部署設定問題）\n2. 網路無法連線\n3. URL 失效`, '#d29922');
   }
 }
- 
+
 // ── JSONP 載入（完全不受 CORS 限制）──
 function fetchViaJsonp(url) {
   return new Promise((resolve, reject) => {
@@ -2096,35 +2126,35 @@ function fetchViaJsonp(url) {
       cleanup();
       reject(new Error('請求逾時（10秒）— 請確認 Apps Script 部署設定「誰可以存取」為「所有人」'));
     }, 10000);
- 
+
     function cleanup() {
       clearTimeout(timer);
       delete window[cbName];
       if (script.parentNode) script.parentNode.removeChild(script);
     }
- 
+
     window[cbName] = (data) => {
       cleanup();
       resolve(data);
     };
- 
+
     script.src = `${url}?callback=${cbName}`;
     script.onerror = () => { cleanup(); reject(new Error('Script 載入失敗 — 請確認 URL 正確且 Apps Script 已部署')); };
     document.head.appendChild(script);
   });
 }
- 
+
 // ── 主要抓取函數 ──
 async function fetchGoogleSheet() {
   const btn  = document.getElementById('refresh-btn');
   const icon = document.getElementById('refresh-icon');
   const tag  = document.getElementById('last-update-tag');
- 
+
   btn.disabled = true;
   icon.classList.add('spinning');
   tag.className   = '';
   tag.textContent = '更新中…';
- 
+
   try {
     // 用 JSONP 繞過 CORS，完全不受跨域限制
     let data;
@@ -2133,34 +2163,34 @@ async function fetchGoogleSheet() {
     } catch(e) {
       throw new Error(e.message);
     }
- 
+
     if (!data || typeof data !== 'object') {
       throw new Error('回傳資料為空，請重新部署 Apps Script');
     }
- 
+
     // 自動掃描所有工作表，無需維護名稱清單
     const { lookup, foundSheets } = buildLookupFromAllSheets(data);
- 
+
     if (foundSheets === 0) {
       throw new Error(`找不到任何含年度的工作表。回傳分頁：${Object.keys(data).join('、') || '（空）'}`);
     }
- 
+
     const newRAW = buildRAWFromLookup(lookup);
     const total  = countTotal(newRAW);
- 
+
     if (total === 0) throw new Error('解析後資料全為 0，請確認試算表格式是否正確');
- 
+
     Object.assign(RAW, newRAW);
     // 確保舊年度 key 不殘留（若 RAW 原本有資料但新版沒有同年度就保留；只新增/覆蓋）
     renderAll();
- 
+
     const detectedYears = Object.keys(newRAW).sort().join('、');
     const nowStr = fmtTime(new Date());
     tag.textContent = `✓ ${nowStr.slice(5,16)} 更新`;
     tag.className   = 'ok';
     pushLog('ok', `成功同步 ${foundSheets} 個工作表 ｜ 偵測年度：${detectedYears} ｜ 共 ${total} 場次`, total);
     showToast(`✅ 同步成功！年度：${detectedYears}，共 ${total} 場次`, 'green');
- 
+
   } catch(err) {
     const msg = err.message || '未知錯誤';
     tag.textContent = '更新失敗';
@@ -2172,7 +2202,7 @@ async function fetchGoogleSheet() {
     icon.classList.remove('spinning');
   }
 }
- 
+
 function showToast(msg, color) {
   const ex = document.getElementById('gs-toast');
   if (ex) ex.remove();
@@ -2189,7 +2219,7 @@ function showToast(msg, color) {
   document.body.appendChild(t);
   setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),400); }, 5000);
 }
- 
+
 // ── Page switching (dashboard / db) ──
 function switchView(v) {
   const isDash = v !== 'db';
@@ -2205,12 +2235,12 @@ function switchView(v) {
     renderDbPage();
   }
 }
- 
+
 // Init
 renderAll();
 renderDbPage();
 syncFloatPanel();
 </script>
- 
+
 </body>
 </html>
