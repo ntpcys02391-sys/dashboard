@@ -2176,12 +2176,26 @@ async function fetchGoogleSheet() {
     }
 
     const newRAW = buildRAWFromLookup(lookup);
+
+    // 過濾掉場次全為 0 的年度（例如名稱含年份但實際是說明頁）
+    Object.keys(newRAW).forEach(y => {
+      let yTotal = 0;
+      ["1F","2F"].forEach(f => DK.forEach(d =>
+        (newRAW[y]?.[f]?.[d] || []).forEach(abc => abc.forEach(v => yTotal += v))
+      ));
+      if (yTotal === 0) {
+        console.warn(`⚠️ 年度 ${y} 場次全為 0，已排除（可能是非資料工作表）`);
+        delete newRAW[y];
+      }
+    });
+
     const total  = countTotal(newRAW);
 
     if (total === 0) throw new Error('解析後資料全為 0，請確認試算表格式是否正確');
 
+    // 清除舊 RAW 全部 key，再寫入新資料（避免殘留已刪除的年度）
+    Object.keys(RAW).forEach(k => delete RAW[k]);
     Object.assign(RAW, newRAW);
-    // 確保舊年度 key 不殘留（若 RAW 原本有資料但新版沒有同年度就保留；只新增/覆蓋）
     renderAll();
 
     const detectedYears = Object.keys(newRAW).sort().join('、');
