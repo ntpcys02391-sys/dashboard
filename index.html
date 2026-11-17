@@ -34,7 +34,7 @@
     padding: 0;
   }
   .header {
-    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    background: var(--header-bg);
     border-bottom: 1px solid var(--border2);
     padding: 28px 32px 24px;
     position: sticky;
@@ -186,15 +186,15 @@
     gap: 7px;
     padding: 4px 11px 4px 7px;
     border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--tint3);
+    background: var(--tint1);
     font-size: 12px;
     color: var(--text2);
     cursor: pointer;
     user-select: none;
     transition: border-color 0.15s, background 0.15s, opacity 0.15s, color 0.15s;
   }
-  .legend-chip:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .legend-chip:hover { background: var(--tint2); border-color: var(--tint3); }
   .legend-chip.active { color: var(--text); }
   .legend-chip.muted  { opacity: 0.38; }
   .legend-chip-box {
@@ -314,7 +314,7 @@
     margin: 1px 0;
   }
   .hm-cell-new:hover { filter: brightness(1.2); }
-  .hm-cell-new.closed { background: rgba(255,255,255,0.04); color: var(--text3); font-size: 11px; border-radius: 5px; }
+  .hm-cell-new.closed { background: var(--tint1); color: var(--text3); font-size: 11px; border-radius: 5px; }
   .hm-legend {
     display: flex;
     align-items: center;
@@ -334,7 +334,7 @@
     height: 16px;
     border-radius: 3px;
   }
-  .hm-month-divider td { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 4px; }
+  .hm-month-divider td { border-top: 1px solid var(--tint2); padding-top: 4px; }
   .period-badge {
     display: inline-flex;
     align-items: center;
@@ -378,7 +378,7 @@
     color: var(--text);
   }
   .data-table tr:last-child td { border-bottom: none; }
-  .data-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .data-table tr:hover td { background: var(--tint1); }
   .mono { font-family: 'DM Mono', monospace; }
   .tag {
     display: inline-block;
@@ -467,7 +467,7 @@
     font-size: 13px; transition: background 0.1s;
   }
   .db-log-row:last-child { border-bottom: none; }
-  .db-log-row:hover { background: rgba(255,255,255,0.025); }
+  .db-log-row:hover { background: var(--tint1); }
   .db-log-icon { font-size: 16px; text-align: center; }
   .db-log-time { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2); }
   .db-log-msg  { color: var(--text); font-size: 12px; }
@@ -508,7 +508,7 @@
     box-shadow:
       0 24px 60px rgba(0,0,0,0.7),
       0 0 0 1px rgba(88,166,255,0.07),
-      inset 0 1px 0 rgba(255,255,255,0.05);
+      inset 0 1px 0 var(--tint2);
     margin-bottom: 12px;
     transform-origin: bottom right;
     transform: scale(0.82) translateY(16px);
@@ -539,7 +539,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(255,255,255,0.06);
+    background: var(--tint2);
   }
   .fp-chips {
     display: flex;
@@ -549,9 +549,9 @@
   .fp-chip {
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.09);
-    background: rgba(255,255,255,0.04);
-    color: #8b949e;
+    border: 1px solid var(--tint2);
+    background: var(--tint1);
+    color: var(--text2);
     font-size: 12px;
     font-family: 'Noto Sans TC', sans-serif;
     font-weight: 500;
@@ -573,7 +573,7 @@
   .fp-chip.active-period-a  { border-color: #58a6ff; color: #58a6ff; background: rgba(88,166,255,0.14); }
   .fp-chip.active-period-b  { border-color: #3fb950; color: #3fb950; background: rgba(63,185,80,0.14); }
   .fp-chip.active-period-c  { border-color: #d29922; color: #d29922; background: rgba(210,153,34,0.14); }
-  .fp-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 14px 0 0; }
+  .fp-divider { height: 1px; background: var(--tint2); margin: 14px 0 0; }
   .fp-status {
     margin-top: 11px;
     font-size: 11px;
@@ -688,6 +688,59 @@
   details.fold:not([open]) > summary .chev::before { content:'展開 ▼'; }
   details.fold[open] > summary { margin-bottom:16px; }
   @media (max-width:760px){ .header{padding:12px 16px !important} .main{padding:20px 16px !important} .ym-table td.rowhead{width:60px} .ym-cell{height:44px;font-size:14px} .charts-grid{grid-template-columns:1fr !important} }
+  #float-filter-wrap { display:none !important; }
+  .filter-bar { position:sticky; top:var(--hdr-h,72px); z-index:90; margin:-8px 0 22px; padding:10px 16px; background:rgba(22,27,34,.94); backdrop-filter:blur(8px); border:1px solid var(--border2); border-radius:12px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; }
+  .fb-group { display:flex; align-items:center; gap:6px; }
+  .fb-label { font-size:12px; color:var(--text2); margin-right:2px; white-space:nowrap; }
+  .fb-status { margin-left:auto; font-size:12px; color:var(--text2); display:flex; align-items:center; gap:10px; }
+  .fb-status b { color:var(--accent); font-weight:600; }
+  .fb-reset { background:none; border:1px solid var(--border2); color:var(--text2); border-radius:6px; padding:3px 10px; font-size:12px; cursor:pointer; font-family:inherit; }
+  .fb-reset:hover { color:var(--text); }
+  #ym-tip { position:fixed; z-index:999; pointer-events:none; display:none; min-width:170px; padding:10px 12px; background:var(--bg3); border:1px solid var(--border2); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.45); font-size:12px; color:var(--text2); }
+  #ym-tip .t { color:var(--text); font-weight:600; margin-bottom:6px; }
+  #ym-tip .r { display:flex; justify-content:space-between; gap:16px; padding:2px 0; }
+  #ym-tip .r b { font-family:'DM Mono',monospace; color:var(--text); font-weight:500; }
+  #ym-tip .s { border-top:1px solid var(--border2); margin-top:4px; padding-top:4px; }
+  .header { transition: transform .25s ease; }
+  .filter-bar { transition: top .25s ease; margin: 0 0 22px !important; }
+  /* ── compact single-row header ── */
+  .header { padding: 8px 20px !important; }
+  .header-inner { gap: 8px 16px; }
+  .header-sub { display: none !important; }
+  .logo-badge { width: 32px; height: 32px; font-size: 16px; border-radius: 8px; }
+  .header-title { gap: 10px; }
+  h1 { font-size: 15px !important; white-space: nowrap; }
+  .year-tabs { padding: 3px; gap: 4px; }
+  .tab-btn { padding: 5px 14px !important; font-size: 13px !important; }
+  .header .filter-bar { position: static !important; margin: 0 !important; padding: 0 0 0 14px !important; background: none !important; border: none !important; border-left: 1px solid var(--border2) !important; border-radius: 0 !important; backdrop-filter: none; display: flex; gap: 6px 14px; flex-wrap: wrap; }
+  .header .filter-chip { padding: 4px 11px !important; font-size: 12px !important; }
+  .header #refresh-btn { padding: 5px 12px !important; font-size: 12px !important; }
+  .fb-reset { padding: 2px 8px; }
+  @media (max-width:900px){ .header .filter-bar{ border-left:none !important; padding-left:0 !important; } }
+
+  /* ── Themes ── */
+  :root { --card-r: 20px; --header-bg: linear-gradient(135deg,#0d1117,#161b22); --tint1: rgba(255,255,255,0.03); --tint2: rgba(255,255,255,0.06); --tint3: rgba(255,255,255,0.1); }
+  html[data-theme="light"] {
+    --bg:#f3f6fb; --bg2:#ffffff; --bg3:#f0f4fa; --border:rgba(20,40,80,0.07); --border2:rgba(20,40,80,0.14);
+    --text:#101418; --text2:#5d6b7e; --text3:#9aa6b6; --accent:#2f7de1; --accent2:#2e9e6b; --accent3:#c58a12; --accent4:#e0674d; --accent5:#8a5fd1;
+    --header-bg: rgba(255,255,255,0.92); --tint1: rgba(20,40,80,0.03); --tint2: rgba(20,40,80,0.05); --tint3: rgba(20,40,80,0.09);
+  }
+  html[data-theme="light"] .kpi-card, html[data-theme="light"] .chart-card { box-shadow: 0 6px 22px rgba(70,100,150,0.10); border: 1px solid rgba(255,255,255,0.8); }
+  html[data-theme="light"] .header { box-shadow: 0 2px 14px rgba(70,100,150,0.08); }
+  html[data-theme="light"] .kpi-card::before { display: none; }
+  html[data-theme="light"] .kpi-card.blue { background: #c6dcfa; }
+  html[data-theme="light"] .kpi-card.green { background: #c9ecd6; }
+  html[data-theme="light"] .kpi-card.amber { background: #f7e8b9; }
+  html[data-theme="light"] .kpi-card.purple { background: #dccff3; }
+  html[data-theme="light"] .kpi-card.coral { background: #fbd8cd; }
+  html[data-theme="light"] .tab-btn.active, html[data-theme="light"] .filter-chip.active:not([style]) { background: #1c1c1e; color: #fff; border-color: #1c1c1e; box-shadow: none; }
+  html[data-theme="light"] .tab-btn:hover:not(.active) { background: #fff; }
+  html[data-theme="light"] .logo-badge { background: #f8efd0; border-color: transparent; }
+  html[data-theme="light"] .year-tabs, html[data-theme="light"] #ym-tip { background: var(--bg3); }
+  html[data-theme="light"] #ym-tip { background: #fff; box-shadow: 0 8px 24px rgba(70,100,150,.2); }
+  .ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.14em; margin-right: 6px; flex-shrink: 0; }
+  #theme-btn .ic { width: 16px; height: 16px; color: var(--text2); }
+  .db-log-icon .ic { width: 16px; height: 16px; }
 </style>
 </head>
 <body>
@@ -695,7 +748,7 @@
 <div class="header">
   <div class="header-inner">
     <div class="header-title">
-      <div class="logo-badge">🏢</div>
+      <div class="logo-badge"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px;margin:0;color:var(--accent)"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></div>
       <div>
         <h1>青職基地 場租使用分析儀表板</h1>
         <div class="header-sub" id="header-sub">場地租賃紀錄分析 ｜ 週一固定休館</div>
@@ -704,6 +757,7 @@
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div class="year-tabs" id="main-tabs">
         </div>
+      <div id="filter-bar" class="filter-bar"></div>
       <button id="refresh-btn" onclick="fetchGoogleSheet('手動更新')">
         <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
@@ -711,7 +765,8 @@
         </svg>
         更新資料
       </button>
-      <button onclick="debugFetch()" title="連線診斷" style="padding:7px 10px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:12px;font-family:'Noto Sans TC',sans-serif;cursor:pointer">🔍</button>
+      <button onclick="debugFetch()" title="連線診斷" style="padding:7px 10px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:12px;font-family:'Noto Sans TC',sans-serif;cursor:pointer;line-height:1"><svg class="ic" viewBox="0 0 24 24" style="margin:0"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+      <button id="theme-btn" onclick="toggleTheme()" style="padding:5px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:14px;cursor:pointer;line-height:1"></button>
       <span id="last-update-tag">尚未更新</span>
     </div>
   </div>
@@ -719,6 +774,7 @@
 
 <div id="dashboard-page">
 <div class="main">
+  <div id="ym-tip"></div>
   <div id="kpi-row" class="kpi-row"></div>
 
   <div id="all-year-sub-bar" style="display:none;margin-bottom:20px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);display:none;flex-wrap:wrap;align-items:center;gap:10px;">
@@ -776,6 +832,7 @@
       <div class="canvas-wrap" style="height:260px">
         <canvas id="periodChart" role="img" aria-label="A、B、C時段使用比例圓餅圖">時段資料</canvas>
       </div>
+      <div id="period-legend-single" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"></div>
     </div>
   </div>
 
@@ -829,7 +886,7 @@
 </div><div id="db-page" class="main">
   <div class="db-header">
     <div>
-      <div class="db-title">🗄 資料庫</div>
+      <div class="db-title"><svg class="ic" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0"/></svg>資料庫</div>
       <div class="db-subtitle">Google Sheet 同步紀錄 ｜ 每次資料更新均記錄於此</div>
     </div>
     <button onclick="clearDbLog()" style="padding:6px 14px;background:rgba(247,129,102,0.1);border:1px solid rgba(247,129,102,0.3);border-radius:8px;color:#f78166;font-size:12px;font-family:'Noto Sans TC',sans-serif;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='rgba(247,129,102,0.2)'" onmouseout="this.style.background='rgba(247,129,102,0.1)'">清除紀錄</button>
@@ -844,10 +901,10 @@
 
   <div class="db-log-card">
     <div class="db-log-card-header">
-      📋 同步紀錄
+      <svg class="ic" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg>同步紀錄
       <span style="font-size:11px;color:var(--text3);font-weight:400;margin-left:4px" id="db-log-count"></span>
     </div>
-    <div id="db-log-header" class="db-log-row" style="background:rgba(255,255,255,0.02);font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.5px;text-transform:uppercase">
+    <div id="db-log-header" class="db-log-row" style="background:var(--tint1);font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.5px;text-transform:uppercase">
       <div></div>
       <div>時間</div>
       <div>訊息</div>
@@ -860,7 +917,7 @@
   </div>
 
   <div class="db-source-box">
-    <div class="db-source-label">📡 資料來源</div>
+    <div class="db-source-label"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>資料來源</div>
     <div class="db-source-url" id="db-source-url"></div>
   </div>
 </div>
@@ -871,19 +928,19 @@
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <div style="display:flex;align-items:center;gap:7px">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-        <span style="font-size:13px;font-weight:600;color:#e6edf3;letter-spacing:-0.2px">篩選條件</span>
+        <span style="font-size:13px;font-weight:600;color:var(--text);letter-spacing:-0.2px">篩選條件</span>
       </div>
-      <button id="fp-reset" onclick="fpReset()" style="font-size:11px;color:#8b949e;background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px;font-family:'Noto Sans TC',sans-serif;transition:color 0.15s" onmouseover="this.style.color='#e6edf3'" onmouseout="this.style.color='#8b949e'">重置</button>
+      <button id="fp-reset" onclick="fpReset()" style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px;font-family:'Noto Sans TC',sans-serif;transition:color 0.15s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">重置</button>
     </div>
 
-    <div class="fp-section-label">🏢 樓層</div>
+    <div class="fp-section-label"><svg class="ic" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>樓層</div>
     <div class="fp-chips">
       <button class="fp-chip active-floor-all" data-floor="all" onclick="fpFloor('all')" >全部</button>
       <button class="fp-chip"                  data-floor="1F"   onclick="fpFloor('1F')" >1F</button>
       <button class="fp-chip"                  data-floor="2F"   onclick="fpFloor('2F')" >2F</button>
     </div>
 
-    <div class="fp-section-label" style="margin-top:14px">⏰ 時段</div>
+    <div class="fp-section-label" style="margin-top:14px"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>時段</div>
     <div class="fp-chips">
       <button class="fp-chip active-period-all" data-period="all" onclick="fpPeriod('all')">全部</button>
       <button class="fp-chip"                   data-period="A"   onclick="fpPeriod('A')">A 段</button>
@@ -904,7 +961,7 @@
     <div class="fp-status" id="fp-status-row">
       <span style="color:rgba(139,148,158,0.5);font-size:11px">目前：</span>
       <span class="fp-status-tag" id="fp-tag-floor">全部樓層</span>
-      <span class="fp-status-tag" id="fp-tag-period" style="background:rgba(139,148,158,0.1);color:#8b949e">全部時段</span>
+      <span class="fp-status-tag" id="fp-tag-period" style="background:rgba(139,148,158,0.1);color:var(--text2)">全部時段</span>
     </div>
   </div>
 
@@ -917,6 +974,27 @@
 </div>
 
 <script>
+const TC = {};
+const PERIOD_COLORS = ["#58a6ff","#3fb950","#d29922"];
+const PERIOD_BG = ["rgba(88,166,255,0.15)","rgba(63,185,80,0.15)","rgba(210,153,34,0.15)"];
+function applyTheme(t, rerender) {
+  const L = t === "light";
+  document.documentElement.setAttribute("data-theme", t);
+  Object.assign(TC, { t2: L ? "#5d6b7e" : "#8b949e", text: L ? "#101418" : "#e6edf3", grid: L ? "rgba(20,30,50,0.07)" : "rgba(255,255,255,0.05)", tipBg: L ? "#ffffff" : "#21262d", tipBd: L ? "#dfe6ef" : "#30363d", tint: L ? "rgba(20,40,80,0.12)" : "rgba(255,255,255,0.1)" });
+  PERIOD_COLORS.splice(0, 3, ...(L ? ["#3f86e8","#2fa56f","#e0a022"] : ["#58a6ff","#3fb950","#d29922"]));
+  PERIOD_BG.splice(0, 3, ...(L ? ["#d3e4fb","#d0eedc","#f9ecc4"] : ["rgba(88,166,255,0.15)","rgba(63,185,80,0.15)","rgba(210,153,34,0.15)"]));
+  TC.card = L ? "#ffffff" : "#161b22";
+  try { localStorage.setItem("theme", t); } catch (e) {}
+  const b = document.getElementById("theme-btn");
+  if (b) { b.innerHTML = L ? '<svg class="ic" viewBox="0 0 24 24" style="margin:0"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>' : '<svg class="ic" viewBox="0 0 24 24" style="margin:0"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'; b.title = L ? "切換為夜間模式" : "切換為日間模式"; }
+  if (rerender) renderAll();
+}
+function toggleTheme() { applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light", true); }
+(function () {
+  let t = null; try { t = localStorage.getItem("theme"); } catch (e) {}
+  if (!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  applyTheme(t, false);
+})();
 /* ════════════════════════════════════════════════════════
     RAW data  — supports arbitrary year keys
 ════════════════════════════════════════════════════════ */
@@ -968,8 +1046,6 @@ const RAW = {
 const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const DAY_LABELS = ["週一(休館)","週二","週三","週四","週五","週六","週日"];
 const PERIODS = ["A","B","C"];
-const PERIOD_COLORS = ["#58a6ff","#3fb950","#d29922"];
-const PERIOD_BG = ["rgba(88,166,255,0.15)","rgba(63,185,80,0.15)","rgba(210,153,34,0.15)"];
 
 // ── Dynamic year helpers ──────────────────────────────────
 function getRocYear(westernYear) { return westernYear - 1911; }
@@ -1008,7 +1084,7 @@ function buildMainTabs() {
   const allActive = (isDashboard && currentYear === 'all') ? ' active' : '';
   html += `<button class="tab-btn${allActive}" onclick="switchView('all')">全年比較</button>`;
   const dbActive = currentYear === 'db' ? ' active' : '';
-  html += `<button class="tab-btn${dbActive}" onclick="switchView('db')" id="db-tab">🗄 資料庫</button>`;
+  html += `<button class="tab-btn${dbActive}" onclick="switchView('db')" id="db-tab"><svg class="ic" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0"/></svg>資料庫</button>`;
   container.innerHTML = html;
 
   const allYrs = getAllYears();
@@ -1408,9 +1484,9 @@ function renderMonthlyChart() {
         legend: { display: false },
         tooltip: {
           backgroundColor: "#1c2128",
-          titleColor: "#e6edf3",
-          bodyColor: "#8b949e",
-          borderColor: "rgba(255,255,255,0.1)",
+          titleColor: TC.text,
+          bodyColor: TC.t2,
+          borderColor: TC.tint,
           borderWidth: 1,
           padding: 12,
           filter: item => !hiddenYears.has(yrs[item.datasetIndex]),
@@ -1419,12 +1495,12 @@ function renderMonthlyChart() {
       },
       scales: {
         x: {
-          grid: { color: "rgba(255,255,255,0.04)", drawBorder: false },
-          ticks: { color: "#8b949e", font: { size: 12 } }
+          grid: { color: TC.grid, drawBorder: false },
+          ticks: { color: TC.t2, font: { size: 12 } }
         },
         y: {
-          grid: { color: "rgba(255,255,255,0.04)", drawBorder: false },
-          ticks: { color: "#8b949e", font: { size: 12 }, stepSize: 5 },
+          grid: { color: TC.grid, drawBorder: false },
+          ticks: { color: TC.t2, font: { size: 12 }, stepSize: 5 },
           beginAtZero: true
         }
       }
@@ -1443,29 +1519,62 @@ function renderWeekdayChart() {
     datasets = yrs.map((y, i) => ({ label: y+"年", data: wd[y], backgroundColor: palette[i%palette.length], borderRadius: 4 }));
   } else {
     const y = yrs[0];
-    datasets = [{ label: y+"年", data: wd[y], backgroundColor: labels.map((_, i) => i === 0 ? "rgba(255,255,255,0.1)" : "#58a6ff"), borderRadius: 4 }];
+    datasets = [{ label: y+"年", data: wd[y], backgroundColor: labels.map((_, i) => i === 0 ? TC.tint : "#58a6ff"), borderRadius: 4 }];
   }
   charts["weekday"] = new Chart(document.getElementById("weekdayChart"), {
     type: "bar",
     data: { labels, datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: yrs.length > 1, labels: { color: "#8b949e", boxWidth: 12, font: { size: 11 } } }, tooltip: { backgroundColor: "#21262d", titleColor: "#e6edf3", bodyColor: "#8b949e", borderColor: "#30363d", borderWidth: 1 } },
+      plugins: { legend: { display: yrs.length > 1, labels: { color: TC.t2, boxWidth: 12, font: { size: 11 } } }, tooltip: { backgroundColor: TC.tipBg, titleColor: TC.text, bodyColor: TC.t2, borderColor: TC.tipBd, borderWidth: 1 } },
       scales: {
-        x: { grid: { display: false }, ticks: { color: "#8b949e", font: { size: 11 }, maxRotation: 30 } },
-        y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#8b949e", font: { size: 12 } }, beginAtZero: true }
+        x: { grid: { display: false }, ticks: { color: TC.t2, font: { size: 11 }, maxRotation: 30 } },
+        y: { grid: { color: TC.grid }, ticks: { color: TC.t2, font: { size: 12 } }, beginAtZero: true }
       }
     }
   });
+}
+
+const pctLabelPlugin = (fs) => ({
+  id: "pctLabels",
+  afterDatasetsDraw(chart) {
+    const ds = chart.data.datasets[0].data, tot = ds.reduce((a,b)=>a+b,0);
+    if (!tot) return;
+    const ctx = chart.ctx; ctx.save();
+    ctx.font = `700 ${fs}px "DM Mono", monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    chart.getDatasetMeta(0).data.forEach((arc, i) => {
+      const pct = ds[i] / tot * 100;
+      if (pct < 4) return;
+      const pos = arc.tooltipPosition();
+      ctx.fillStyle = i === 2 ? "#1a1300" : "#0d1117";
+      ctx.fillText(Math.round(pct) + "%", pos.x, pos.y);
+    });
+    ctx.restore();
+  }
+});
+
+function renderPeriodLegendSingle(pData) {
+  const el = document.getElementById("period-legend-single");
+  if (!el) return;
+  if (isCompareMode()) { el.innerHTML = ""; return; }
+  const total = pData.reduce((a,b)=>a+b,0);
+  const times = ["10:30–13:30","14:00–17:00","17:30–20:30"];
+  el.innerHTML = pData.map((v,i) => `
+    <div style="flex:1;min-width:90px;padding:8px 10px;border-radius:8px;opacity:${currentPeriod==='all'||currentPeriod===PERIODS[i]?1:.35};background:${PERIOD_BG[i]};border-left:3px solid ${PERIOD_COLORS[i]}">
+      <div style="font-size:11px;color:var(--text2)">${PERIODS[i]} 段 ${times[i]}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:${PERIOD_COLORS[i]}">${total?Math.round(v/total*100):0}%</div>
+      <div style="font-size:11px;color:var(--text2)">${v} 場</div>
+    </div>`).join("");
 }
 
 function renderPeriodChart() {
   destroyChart("period");
 
   if (isCompareMode()) {
+    renderPeriodLegendSingle([0,0,0]);
     const effYrs = getEffectiveYears();
     const palette = ["#58a6ff","#3fb950","#d29922","#bc8cff","#f78166"];
-    const periodColors = ["#58a6ff","#3fb950","#d29922"];
+    const periodColors = PERIOD_COLORS;
     const periodLabels = ["A 段","B 段","C 段"];
 
     const existingCanvas = document.getElementById("periodChart");
@@ -1494,13 +1603,13 @@ function renderPeriodChart() {
         type: "doughnut",
         data: {
           labels: ["A 段 (10:30–13:30)","B 段 (14:00–17:00)","C 段 (17:30–20:30)"],
-          datasets: [{ data: pData, backgroundColor: periodColors, borderWidth: 0, hoverOffset: 6 }]
+          datasets: [{ data: pData, backgroundColor: periodColors, borderWidth: 3, borderColor: TC.card, hoverOffset: 6 }]
         },
         options: {
           responsive: true, maintainAspectRatio: false, cutout: "62%",
           plugins: {
             legend: { display: false },
-            tooltip: { backgroundColor: "#21262d", titleColor: "#e6edf3", bodyColor: "#8b949e", borderColor: "#30363d", borderWidth: 1,
+            tooltip: { backgroundColor: TC.tipBg, titleColor: TC.text, bodyColor: TC.t2, borderColor: TC.tipBd, borderWidth: 1,
               callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} 場 (${total ? Math.round(ctx.parsed/total*100) : 0}%)` } }
           }
         }
@@ -1508,10 +1617,10 @@ function renderPeriodChart() {
       charts[`period_${yr}`] = c;
 
       document.getElementById(`period-legend-${yr}`).innerHTML = periodLabels.map((l,pi) =>
-        `<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#8b949e">
+        `<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)">
           <div style="width:8px;height:8px;border-radius:2px;background:${periodColors[pi]};flex-shrink:0"></div>
-          ${l}: <span style="color:#e6edf3;font-weight:600;font-family:'DM Mono',monospace">${pData[pi]}場</span>
-          <span style="color:#484f58">(${total?Math.round(pData[pi]/total*100):0}%)</span>
+          ${l}: <span style="color:var(--text);font-weight:600;font-family:'DM Mono',monospace">${pData[pi]}場</span>
+          <span style="color:var(--text3)">(${total?Math.round(pData[pi]/total*100):0}%)</span>
         </div>`).join('');
     });
     return;
@@ -1525,17 +1634,18 @@ function renderPeriodChart() {
 
   const pData = aggregatePeriod(currentYear, currentFloor);
   const total = pData.reduce((a,b)=>a+b,0);
+  renderPeriodLegendSingle(pData);
   charts["period"] = new Chart(document.getElementById("periodChart"), {
     type: "doughnut",
     data: {
       labels: ["A 段 (10:30–13:30)","B 段 (14:00–17:00)","C 段 (17:30–20:30)"],
-      datasets: [{ data: pData, backgroundColor: ["#58a6ff","#3fb950","#d29922"], borderWidth: 0, hoverOffset: 8 }]
+      datasets: [{ data: pData, backgroundColor: PERIOD_COLORS.map((c,i) => currentPeriod==="all"||currentPeriod===PERIODS[i] ? c : c+"33"), borderWidth: 3, borderColor: TC.card, hoverOffset: 8 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false, cutout: "65%",
       plugins: {
         legend: { display: false },
-        tooltip: { backgroundColor: "#21262d", titleColor: "#e6edf3", bodyColor: "#8b949e", borderColor: "#30363d", borderWidth: 1, callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} 場 (${total ? Math.round(ctx.parsed/total*100) : 0}%)` } }
+        tooltip: { backgroundColor: TC.tipBg, titleColor: TC.text, bodyColor: TC.t2, borderColor: TC.tipBd, borderWidth: 1, callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} 場 (${total ? Math.round(ctx.parsed/total*100) : 0}%)` } }
       }
     }
   });
@@ -1556,15 +1666,27 @@ function renderFloorChart() {
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: "#21262d", titleColor: "#e6edf3", bodyColor: "#8b949e", borderColor: "#30363d", borderWidth: 1 } },
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: TC.tipBg, titleColor: TC.text, bodyColor: TC.t2, borderColor: TC.tipBd, borderWidth: 1 } },
       scales: {
-        x: { stacked: false, grid: { display: false }, ticks: { color: "#8b949e", font: { size: 11 }, maxRotation: 45 } },
-        y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#8b949e", font: { size: 12 } }, beginAtZero: true }
+        x: { stacked: false, grid: { display: false }, ticks: { color: TC.t2, font: { size: 11 }, maxRotation: 45 } },
+        y: { grid: { color: TC.grid }, ticks: { color: TC.t2, font: { size: 12 } }, beginAtZero: true }
       }
     }
   });
 }
 
+function heatColor(t, val) {
+  const L = document.documentElement.getAttribute("data-theme") === "light";
+  if (val === 0) return L ? { bg: "#f1f4f8", fg: "#b5bfcc" } : { bg: "rgba(255,255,255,0.05)", fg: "#484f58" };
+  if (L) {
+    const m = (a, b) => Math.round(a + (b - a) * t);
+    return { bg: `rgb(${m(219,47)},${m(233,125)},${m(251,225)})`, fg: t > 0.5 ? "#fff" : "#1d3a66" };
+  }
+  if (t < 0.3)  return { bg: `rgba(30,80,160,${0.3 + t})`, fg: "#8b949e" };
+  if (t < 0.6)  return { bg: `rgba(40,120,210,${0.5 + t*0.5})`, fg: "#cce8ff" };
+  if (t < 0.85) return { bg: "rgba(56,168,255,0.75)", fg: "#ffffff" };
+  return { bg: "rgba(140,210,255,0.95)", fg: "#0d2040" };
+}
 function renderHeatmap() {
   const yrs = getEffectiveYears();
   const months = RAW[getFirstYear()].months;
@@ -1596,14 +1718,8 @@ function renderHeatmap() {
     });
   });
 
-  function cellBg(val) {
-    if (val === 0) return { bg: "rgba(255,255,255,0.05)", fg: "#484f58" };
-    const t = maxVal > 0 ? val / maxVal : 0;
-    if (t < 0.3)  return { bg: `rgba(30,80,160,${0.3 + t})`,  fg: "#8b949e" };
-    if (t < 0.6)  return { bg: `rgba(40,120,210,${0.5 + t*0.5})`, fg: "#cce8ff" };
-    if (t < 0.85) return { bg: `rgba(56,168,255,${0.75})`,    fg: "#ffffff" };
-    return                { bg: `rgba(140,210,255,0.95)`,       fg: "#0d2040" };
-  }
+  function cellBg(val) { return heatColor(maxVal > 0 ? val / maxVal : 0, val); }
+
 
   const titleLabel = isCompareMode() ? (yrs.join('＋') + "年合計") : (yrs[0] + "年全年");
   const floorLabel = currentFloor === "all" ? "（1F+2F）" : `（${currentFloor}）`;
@@ -1652,7 +1768,7 @@ function renderHeatmap() {
           <td class="td-floor ${fl.toLowerCase()}">${fl}</td>
           ${ACTIVE_DAYS.map((d,di) => {
             const val = getCombinedFloorDayVal(fl, mi, d);
-            const {bg, fg} = d === "Mon" && val === 0 ? { bg: "rgba(255,255,255,0.02)", fg: "#303540" } : cellBg(val);
+            const {bg, fg} = d === "Mon" && val === 0 ? { bg: "var(--tint1)", fg: "#303540" } : cellBg(val);
             const monStyle = d === "Mon" ? "opacity:0.6;" : "";
             return `<td><div class="hm-cell-new" style="background:${bg};color:${fg};${monStyle}" title="${fl} ${m} ${ACTIVE_DAY_LABELS[di]}: ${val}場">${val > 0 ? val : (d==="Mon"?"–":"")}</div></td>`;
           }).join("")}
@@ -1673,7 +1789,7 @@ function renderHeatmap() {
             <td class="td-floor ${fl.toLowerCase()}">${fl}</td>
             ${ACTIVE_DAYS.map((d,di) => {
               const val = getMonthFloorDayVal(yr, fl, mi, d);
-              const {bg, fg} = d === "Mon" && val === 0 ? { bg: "rgba(255,255,255,0.02)", fg: "#303540" } : cellBg(val);
+              const {bg, fg} = d === "Mon" && val === 0 ? { bg: "var(--tint1)", fg: "#303540" } : cellBg(val);
               const monStyle = d === "Mon" ? "opacity:0.6;" : "";
               return `<td><div class="hm-cell-new" style="background:${bg};color:${fg};${monStyle}" title="${fl} ${m} ${ACTIVE_DAY_LABELS[di]}: ${val}場">${val > 0 ? val : (d==="Mon"?"–":"")}</div></td>`;
             }).join("")}
@@ -1687,7 +1803,7 @@ function renderHeatmap() {
   html += `</tbody></table>
   <div class="hm-legend">
     <span>色階說明：</span>
-    <div class="hm-legend-item"><div class="hm-legend-swatch" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)"></div>0 場</div>
+    <div class="hm-legend-item"><div class="hm-legend-swatch" style="background:var(--tint2);border:1px solid var(--tint3)"></div>0 場</div>
     <div class="hm-legend-item"><div class="hm-legend-swatch" style="background:rgba(30,80,160,0.5)"></div>1–3 場</div>
     <div class="hm-legend-item"><div class="hm-legend-swatch" style="background:rgba(40,120,210,0.85)"></div>4–7 場</div>
     <div class="hm-legend-item"><div class="hm-legend-swatch" style="background:rgba(56,168,255,0.75)"></div>8–12 場</div>
@@ -1723,12 +1839,52 @@ function renderDetailTable() {
   document.getElementById('detail-table').innerHTML = `<table class="data-table"><thead>${header}</thead><tbody>${rows}</tbody></table>`;
 }
 
+function renderFilterBar() {
+  const bar = document.getElementById("filter-bar");
+  if (!bar) return;
+  const chip = (on, fn, t, color) => `<button class="filter-chip ${on?'active':''}" onclick="${fn}"${on&&color?` style="background:${color}33;border-color:${color};color:${color}"`:''}>${t}</button>`;
+  const fl = [["all","全部"],["1F","1F"],["2F","2F"]].map(([v,t]) => chip(currentFloor===v, `setFloor('${v}')`, t)).join("");
+  const pc = PERIOD_COLORS;
+  const pr = [["all","全部"],["A","A"],["B","B"],["C","C"]].map(([v,t],i) => chip(currentPeriod===v, `setPeriod('${v}')`, t, i?pc[i-1]:null)).join("");
+  const filtered = currentFloor !== "all" || currentPeriod !== "all";
+  bar.innerHTML = `
+    <div class="fb-group" title="樓層篩選，套用於全部圖表"><span class="fb-label">樓層</span>${fl}</div>
+    <div class="fb-group" title="時段篩選：A 10:30–13:30 ｜ B 14:00–17:00 ｜ C 17:30–20:30"><span class="fb-label">時段</span>${pr}</div>
+    ${filtered?'<button class="fb-reset" onclick="fpReset()"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>清除</button>':''}`;
+}
+
+const PERIOD_TIMES = ["10:30–13:30","14:00–17:00","17:30–20:30"];
+function showYmTip(ev, pi, di) {
+  const t = document.getElementById("ym-tip"), g = window._ymF;
+  if (!g) return;
+  const names = ["一","二","三","四","五","六","日"];
+  const a = g["1F"][pi][di], b = g["2F"][pi][di];
+  t.innerHTML = `<div class="t">週${names[di]} · ${PERIODS[pi]} 段 <span style="color:var(--text2);font-weight:400">${PERIOD_TIMES[pi]}</span></div>
+    <div class="r"><span style="color:#58a6ff">● 1F</span><b>${a} 場</b></div>
+    <div class="r"><span style="color:#bc8cff">● 2F</span><b>${b} 場</b></div>
+    <div class="r s"><span>合計</span><b>${a+b} 場</b></div>`;
+  t.style.display = "block";
+  const w = t.offsetWidth, h = t.offsetHeight;
+  let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + w > innerWidth - 8) x = ev.clientX - w - 14;
+  if (y + h > innerHeight - 8) y = ev.clientY - h - 14;
+  t.style.left = x + "px"; t.style.top = y + "px";
+}
+function hideYmTip() { const t = document.getElementById("ym-tip"); if (t) t.style.display = "none"; }
+window.addEventListener("resize", renderFilterBar);
+
+
 let ymMonth = -1;
 function setYmMonth(m) { ymMonth = m; renderYearMatrix(); }
 function renderYearMatrix() {
   const yrs = getEffectiveYears();
   const floors = currentFloor === "all" ? ["1F","2F"] : [currentFloor];
   const grid = PERIODS.map(() => DAYS.map(() => 0));
+  const gF = {"1F": PERIODS.map(() => DAYS.map(() => 0)), "2F": PERIODS.map(() => DAYS.map(() => 0))};
+  yrs.forEach(y => ["1F","2F"].forEach(f => DAYS.forEach((d, di) => {
+    (RAW[y]?.[f]?.[d] || []).forEach((abc, mi) => { if (ymMonth < 0 || mi === ymMonth) abc.forEach((v, pi) => { gF[f][pi][di] += v; }); });
+  })));
+  window._ymF = gF;
   yrs.forEach(y => floors.forEach(f => DAYS.forEach((d, di) => {
     (RAW[y]?.[f]?.[d] || []).forEach((abc, mi) => { if (ymMonth < 0 || mi === ymMonth) abc.forEach((v, pi) => { grid[pi][di] += v; }); });
   })));
@@ -1736,19 +1892,17 @@ function renderYearMatrix() {
   const colT = DAYS.map((_, di) => grid.reduce((a,r)=>a+r[di],0));
   const all = rowT.reduce((a,b)=>a+b,0);
   const max = Math.max(1, ...grid.flat());
-  const cell = v => {
-    if (v === 0) return "background:rgba(255,255,255,0.04);color:#484f58";
-    const t = v / max;
-    return `background:rgba(56,140,255,${(0.18 + t*0.75).toFixed(2)});color:${t>0.6?'#fff':'#cce8ff'}`;
-  };
+  const cell = v => { const c = heatColor(v / max, v); return `background:${c.bg};color:${c.fg}`; };
+
   const labels = ["一","二","三","四","五","六","日"];
   document.getElementById("ym-months").innerHTML = ["全年",...ML].map((t,i)=>`<button class="filter-chip ${ymMonth===i-1?'active':''}" onclick="setYmMonth(${i-1})">${t}</button>`).join("");
   const sub = document.getElementById("ym-subtitle");
   if (sub) sub.textContent = `${yrs.length>1 ? yrs.join("＋")+"年累計" : yrs[0]+"年"}${ymMonth<0?"全年":" "+ML[ymMonth]} ｜ ${currentFloor==="all"?"1F+2F":currentFloor} ｜ 共 ${all} 場`;
   let h = `<table class="ym-table"><thead><tr><th></th>${labels.map((l,i)=>`<th class="${i===0?'off':''}">${l}${i===0?'<br><span style="font-size:9px">休館</span>':''}</th>`).join("")}<th style="width:64px">合計</th></tr></thead><tbody>`;
   grid.forEach((row, pi) => {
-    h += `<tr><td class="rowhead"><b style="color:${PERIOD_COLORS[pi]}">${PERIODS[pi]}</b>${["10:30–13:30","14:00–17:00","17:30–20:30"][pi]}</td>` +
-      row.map((v, di) => `<td><div class="ym-cell" style="${cell(v)}${di===0?';opacity:.55':''}" title="${PERIODS[pi]} 段 週${labels[di]}：${v} 場">${v}${all&&v?`<small>${Math.round(v/all*100)}%</small>`:''}</div></td>`).join("") +
+    const dim = currentPeriod !== "all" && currentPeriod !== PERIODS[pi];
+    h += `<tr style="${dim?'opacity:.28':''}"><td class="rowhead"><b style="color:${PERIOD_COLORS[pi]}">${PERIODS[pi]}</b>${["10:30–13:30","14:00–17:00","17:30–20:30"][pi]}</td>` +
+      row.map((v, di) => `<td><div class="ym-cell" style="${cell(v)}${di===0?';opacity:.55':''};cursor:default" onmouseenter="showYmTip(event,${pi},${di})" onmousemove="showYmTip(event,${pi},${di})" onmouseleave="hideYmTip()">${v}${all&&v?`<small>${Math.round(v/all*100)}%</small>`:''}</div></td>`).join("") +
       `<td class="ym-tot">${rowT[pi]}<small>${all?Math.round(rowT[pi]/all*100):0}%</small></td></tr>`;
   });
   h += `<tr class="ym-foot"><td class="rowhead">合計</td>${colT.map(v=>`<td class="ym-tot">${v}</td>`).join("")}<td class="ym-tot" style="font-weight:700">${all}</td></tr></tbody></table>`;
@@ -1757,6 +1911,7 @@ function renderYearMatrix() {
 
 function renderAll() {
   buildMainTabs();
+  renderFilterBar();
   buildAllYearSubBar();
   renderKPI();
   renderMonthlyChart();
@@ -1798,7 +1953,7 @@ function syncFloatPanel() {
   });
   const floorLabel  = { all:'全部樓層', '1F':'1F', '2F':'2F' };
   const periodLabel = { all:'全部時段', A:'A 段', B:'B 段', C:'C 段' };
-  const periodColors = { all:'rgba(139,148,158,0.12);color:#8b949e', A:'rgba(88,166,255,0.12);color:#58a6ff', B:'rgba(63,185,80,0.12);color:#3fb950', C:'rgba(210,153,34,0.12);color:#d29922' };
+  const periodColors = { all:'rgba(139,148,158,0.12);color:var(--text2)', A:'rgba(88,166,255,0.12);color:#58a6ff', B:'rgba(63,185,80,0.12);color:#3fb950', C:'rgba(210,153,34,0.12);color:#d29922' };
   document.getElementById('fp-tag-floor').textContent  = floorLabel[currentFloor];
   const pt = document.getElementById('fp-tag-period');
   pt.textContent = periodLabel[currentPeriod];
@@ -1907,7 +2062,7 @@ function renderDbPage() {
   }
   body.innerHTML = dbLog.map(l => `
     <div class="db-log-row">
-      <div class="db-log-icon">${l.status==='ok' ? '✅' : '❌'}</div>
+      <div class="db-log-icon">${l.status==='ok' ? '<svg class="ic" viewBox="0 0 24 24" style="color:#3fb950;margin:0"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>' : '<svg class="ic" viewBox="0 0 24 24" style="color:#f78166;margin:0"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>'}</div>
       <div class="db-log-time">${l.time}</div>
       <div class="db-log-msg">${l.msg}</div>
       <div class="db-log-total">${l.total ? l.total+' 場' : '—'}</div>
@@ -1986,17 +2141,17 @@ async function debugFetch() {
       width:90%;max-width:700px;max-height:70vh;overflow:auto;
       background:#0d1117;border:2px solid #d29922;border-radius:12px;
       padding:20px;z-index:99999;font-family:'DM Mono',monospace;font-size:12px;
-      color:#e6edf3;box-shadow:0 20px 60px rgba(0,0,0,0.8);`;
+      color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,0.8);`;
     document.body.appendChild(d);
     return d;
   })();
 
   out.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:12px">
-    <span style="color:#d29922;font-weight:700">🔍 API 診斷</span>
-    <button onclick="document.getElementById('debug-output').remove()" style="background:none;border:none;color:#8b949e;cursor:pointer;font-size:16px">✕</button>
+    <span style="color:#d29922;font-weight:700"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>API 診斷</span>
+    <button onclick="document.getElementById('debug-output').remove()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:16px"><svg class="ic" viewBox="0 0 24 24" style="margin:0"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </div><div id="debug-log" style="white-space:pre-wrap;line-height:1.6">正在連線...</div>`;
 
-  const log = (msg, color='#e6edf3') => {
+  const log = (msg, color='var(--text)') => {
     document.getElementById('debug-log').innerHTML += `<span style="color:${color}">${msg}</span>\n`;
   };
 
@@ -2005,7 +2160,7 @@ async function debugFetch() {
     log('用 JSONP 方式請求（繞過 CORS）...');
 
     const data = await fetchViaJsonp(APPS_SCRIPT_URL);
-    log(`\n✅ 成功取得資料！`, '#3fb950');
+    log(`\n成功取得資料！`, '#3fb950');
 
     const keys = Object.keys(data);
     log(`工作表數量: ${keys.length}`, '#3fb950');
@@ -2013,7 +2168,7 @@ async function debugFetch() {
     keys.forEach(k => {
       const yr = detectYearFromSheetName(k);
       const rows = (data[k]||[]).length;
-      const tag = yr ? `✅ 年度 ${yr}` : `❌ 無法偵測年度`;
+      const tag = yr ? `年度 ${yr}` : `無法偵測年度`;
       const color = yr ? '#3fb950' : '#f78166';
       log(`  [${tag}]  「${k}」  (${rows} 列)`, color);
     });
@@ -2034,7 +2189,7 @@ async function debugFetch() {
       });
     }
   } catch(e) {
-    log(`\n❌ fetch 錯誤: ${e.message}`, '#f78166');
+    log(`\nfetch 錯誤: ${e.message}`, '#f78166');
   }
 }
 
@@ -2113,11 +2268,11 @@ async function fetchGoogleSheet(triggerSource = "手動更新") {
 
     const detectedYears = Object.keys(newRAW).sort().join('、');
     const nowStr = fmtTime(new Date());
-    tag.textContent = `✓ ${nowStr.slice(5,16)} 更新`;
+    tag.textContent = `${nowStr.slice(5,16)} 更新`;
     tag.className   = 'ok';
     
     pushLog('ok', `同步 ${foundSheets} 個工作表 ｜ 偵測年度：${detectedYears} ｜ 共 ${total} 場次`, total, triggerSource);
-    showToast(`✅ 同步成功！年度：${detectedYears}，共 ${total} 場次`, 'green');
+    showToast(`同步成功！年度：${detectedYears}，共 ${total} 場次`, 'green');
 
   } catch(err) {
     const msg = err.message || '未知錯誤';
@@ -2125,7 +2280,7 @@ async function fetchGoogleSheet(triggerSource = "手動更新") {
     tag.className   = 'err';
     
     pushLog('err', msg, 0, triggerSource);
-    showToast(`❌ ${msg}`, 'red');
+    showToast(`${msg}`, 'red');
   } finally {
     btn.disabled = false;
     icon.classList.remove('spinning');
