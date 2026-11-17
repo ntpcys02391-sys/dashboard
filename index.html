@@ -1911,13 +1911,20 @@ const ymSel = new Set();
 const ymOn = mi => ymSel.size === 0 || ymSel.has(mi);
 function setYmMonth(m) {
   if (m < 0) ymSel.clear();
-  else { ymSel.has(m) ? ymSel.delete(m) : ymSel.add(m); if (ymSel.size === 12) ymSel.clear(); }
+  else { ymSel.clear(); ymSel.add(m); }
+  renderYearMatrix();
+}
+function setYmRange() {
+  let a = +document.getElementById("ym-from").value, b = +document.getElementById("ym-to").value;
+  if (a > b) [a, b] = [b, a];
+  ymSel.clear();
+  if (!(a === 0 && b === 11)) for (let i = a; i <= b; i++) ymSel.add(i);
   renderYearMatrix();
 }
 function ymLabel() {
   if (!ymSel.size) return "全年";
   const a = [...ymSel].sort((x, y) => x - y), out = [];
-  for (let i = 0; i < a.length; ) { let j = i; while (j + 1 < a.length && a[j+1] === a[j] + 1) j++; out.push(j - i >= 2 ? `${a[i]+1}–${a[j]+1}` : a.slice(i, j+1).map(x => x+1).join("、")); i = j + 1; }
+  for (let i = 0; i < a.length; ) { let j = i; while (j + 1 < a.length && a[j+1] === a[j] + 1) j++; out.push(j - i >= 1 ? `${a[i]+1}–${a[j]+1}` : a.slice(i, j+1).map(x => x+1).join("、")); i = j + 1; }
   return out.join("、") + "月";
 }
 function renderYearMatrix() {
@@ -1939,7 +1946,7 @@ function renderYearMatrix() {
   const cell = v => { const c = heatColor(v / max, v); return `background:${c.bg};color:${c.fg}`; };
 
   const labels = ["一","二","三","四","五","六","日"];
-  document.getElementById("ym-months").innerHTML = ["全年",...ML].map((t,i)=>`<button class="filter-chip ${(i===0?ymSel.size===0:ymSel.has(i-1))?'active':''}" onclick="setYmMonth(${i-1})">${t}</button>`).join("");
+  document.getElementById("ym-months").innerHTML = ["全年",...ML].map((t,i)=>`<button class="filter-chip ${(i===0?ymSel.size===0:(ymSel.size===1&&ymSel.has(i-1)))?'active':''}" onclick="setYmMonth(${i-1})">${t}</button>`).join("") + `<span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);margin-left:8px;padding-left:12px;border-left:1px solid var(--border2);white-space:nowrap">範圍 從 `+`<select id="ym-from" onchange="setYmRange()" style="background:var(--bg3);color:var(--text);border:1px solid var(--border2);border-radius:8px;padding:4px 6px;font-size:12px;font-family:inherit">${ML.map((t,k)=>`<option value="${k}"${k===(ymSel.size?Math.min(...ymSel):0)?" selected":""}>${t}</option>`).join("")}</select>`+`到`+`<select id="ym-to" onchange="setYmRange()" style="background:var(--bg3);color:var(--text);border:1px solid var(--border2);border-radius:8px;padding:4px 6px;font-size:12px;font-family:inherit">${ML.map((t,k)=>`<option value="${k}"${k===(ymSel.size?Math.max(...ymSel):11)?" selected":""}>${t}</option>`).join("")}</select>`+`</span>`;
   const sub = document.getElementById("ym-subtitle");
   if (sub) sub.textContent = `${yrs.length>1 ? yrs.join("＋")+"年累計" : yrs[0]+"年"}${ymSel.size?" ":""}${ymLabel()} ｜ ${currentFloor==="all"?"1F+2F":currentFloor} ｜ 共 ${all} 場`;
   let h = `<table class="ym-table"><thead><tr><th></th>${labels.map((l,i)=>`<th class="${i===0?'off':''}">${l}${i===0?'<br><span style="font-size:9px">休館</span>':''}</th>`).join("")}<th style="width:64px">合計</th></tr></thead><tbody>`;
