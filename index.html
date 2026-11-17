@@ -741,6 +741,38 @@
   .ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.14em; margin-right: 6px; flex-shrink: 0; }
   #theme-btn .ic { width: 16px; height: 16px; color: var(--text2); }
   .db-log-icon .ic { width: 16px; height: 16px; }
+
+  /* ── Mobile ── */
+  @media (max-width: 760px) {
+    .header { padding: 8px 12px !important; }
+    .header-inner { flex-direction: column; align-items: stretch; gap: 8px; }
+    .header-title { display: none; }
+    .header-inner > div:last-child { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .year-tabs { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab-btn { white-space: nowrap; flex: 1; padding: 6px 10px !important; }
+    .header .filter-bar { flex: 1; gap: 6px 10px; min-width: 0; }
+    .fb-label { display: none; }
+    .header .filter-chip { padding: 4px 9px !important; }
+    #refresh-btn { font-size: 0 !important; padding: 6px 9px !important; }
+    #refresh-btn svg { margin: 0 !important; }
+    #last-update-tag { display: none; }
+    .main { padding: 16px 12px !important; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+    .kpi-card { padding: 14px !important; }
+    .kpi-val { font-size: 26px !important; }
+    .chart-card { padding: 16px 14px !important; }
+    .compare-row { grid-template-columns: 1fr !important; }
+    .hm-table-wrap, #detail-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .ym-table { border-spacing: 3px; }
+    .ym-table td.rowhead { width: 38px; font-size: 0; }
+    .ym-table td.rowhead b { font-size: 16px; }
+    .ym-cell { height: 42px; font-size: 14px; border-radius: 6px; }
+    .ym-cell small { display: none; }
+    .ym-table th:last-child, .ym-tot { width: 44px; font-size: 12px; }
+    #ym-months { flex-wrap: nowrap !important; overflow-x: auto; padding-bottom: 4px; }
+    #ym-months .filter-chip { white-space: nowrap; flex-shrink: 0; }
+    .period-legend { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -1870,6 +1902,7 @@ function showYmTip(ev, pi, di) {
   if (y + h > innerHeight - 8) y = ev.clientY - h - 14;
   t.style.left = x + "px"; t.style.top = y + "px";
 }
+document.addEventListener("click", () => hideYmTip());
 function hideYmTip() { const t = document.getElementById("ym-tip"); if (t) t.style.display = "none"; }
 window.addEventListener("resize", renderFilterBar);
 
@@ -1902,7 +1935,7 @@ function renderYearMatrix() {
   grid.forEach((row, pi) => {
     const dim = currentPeriod !== "all" && currentPeriod !== PERIODS[pi];
     h += `<tr style="${dim?'opacity:.28':''}"><td class="rowhead"><b style="color:${PERIOD_COLORS[pi]}">${PERIODS[pi]}</b>${["10:30–13:30","14:00–17:00","17:30–20:30"][pi]}</td>` +
-      row.map((v, di) => `<td><div class="ym-cell" style="${cell(v)}${di===0?';opacity:.55':''};cursor:default" onmouseenter="showYmTip(event,${pi},${di})" onmousemove="showYmTip(event,${pi},${di})" onmouseleave="hideYmTip()">${v}${all&&v?`<small>${Math.round(v/all*100)}%</small>`:''}</div></td>`).join("") +
+      row.map((v, di) => `<td><div class="ym-cell" style="${cell(v)}${di===0?';opacity:.55':''};cursor:default" onmouseenter="showYmTip(event,${pi},${di})" onmousemove="showYmTip(event,${pi},${di})" onmouseleave="hideYmTip()" onclick="showYmTip(event,${pi},${di});event.stopPropagation()">${v}${all&&v?`<small>${Math.round(v/all*100)}%</small>`:''}</div></td>`).join("") +
       `<td class="ym-tot">${rowT[pi]}<small>${all?Math.round(rowT[pi]/all*100):0}%</small></td></tr>`;
   });
   h += `<tr class="ym-foot"><td class="rowhead">合計</td>${colT.map(v=>`<td class="ym-tot">${v}</td>`).join("")}<td class="ym-tot" style="font-weight:700">${all}</td></tr></tbody></table>`;
