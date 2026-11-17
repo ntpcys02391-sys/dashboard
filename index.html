@@ -662,6 +662,32 @@
     #float-filter-wrap { bottom: 20px; right: 16px; }
     #float-panel { width: 200px; }
   }
+
+  /* ── UX refresh ── */
+  .header { padding: 14px 32px !important; }
+  .header-sub { font-size: 12px; }
+  .section-label { display:flex; align-items:center; gap:10px; font-size:12px; font-weight:600; letter-spacing:1px; color:var(--text2); margin:8px 0 14px; }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+  .charts-grid, .compare-row { margin-bottom: 28px !important; }
+  .period-legend { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--text2); }
+  .period-legend b { font-family:'DM Mono',monospace; font-weight:500; margin-right:4px; }
+  .ym-table { width:100%; border-collapse:separate; border-spacing:5px; table-layout:fixed; }
+  .ym-table th { font-size:12px; font-weight:500; color:var(--text2); padding:4px 0; text-align:center; }
+  .ym-table th.off { color:var(--text3); }
+  .ym-table td.rowhead { width:92px; text-align:left; font-size:12px; color:var(--text2); line-height:1.35; }
+  .ym-table td.rowhead b { display:block; font-size:18px; font-family:'DM Mono',monospace; }
+  .ym-cell { height:54px; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-size:17px; font-weight:500; }
+  .ym-cell small { font-size:10px; opacity:.7; margin-top:1px; }
+  .ym-tot { text-align:center; font-family:'DM Mono',monospace; font-size:14px; color:var(--text); }
+  .ym-tot small { display:block; font-size:10px; color:var(--text2); }
+  .ym-foot td { padding-top:2px; }
+  details.fold > summary { cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; }
+  details.fold > summary::-webkit-details-marker { display:none; }
+  details.fold > summary .chev { color:var(--text2); font-size:12px; }
+  details.fold[open] > summary .chev::before { content:'收合 ▲'; }
+  details.fold:not([open]) > summary .chev::before { content:'展開 ▼'; }
+  details.fold[open] > summary { margin-bottom:16px; }
+  @media (max-width:760px){ .header{padding:12px 16px !important} .main{padding:20px 16px !important} .ym-table td.rowhead{width:60px} .ym-cell{height:44px;font-size:14px} .charts-grid{grid-template-columns:1fr !important} }
 </style>
 </head>
 <body>
@@ -672,7 +698,7 @@
       <div class="logo-badge">🏢</div>
       <div>
         <h1>青職基地 場租使用分析儀表板</h1>
-        <div class="header-sub" id="header-sub">場地租賃紀錄分析 ｜ 時段 A: 10:30–13:30 ｜ B: 14:00–17:00 ｜ C: 17:30–20:30</div>
+        <div class="header-sub" id="header-sub">場地租賃紀錄分析 ｜ 週一固定休館</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -685,7 +711,7 @@
         </svg>
         更新資料
       </button>
-      <button onclick="debugFetch()" style="padding:7px 13px;background:rgba(210,153,34,0.12);border:1px solid rgba(210,153,34,0.35);border-radius:8px;color:#d29922;font-size:12px;font-family:'Noto Sans TC',sans-serif;cursor:pointer">🔍 診斷</button>
+      <button onclick="debugFetch()" title="連線診斷" style="padding:7px 10px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:12px;font-family:'Noto Sans TC',sans-serif;cursor:pointer">🔍</button>
       <span id="last-update-tag">尚未更新</span>
     </div>
   </div>
@@ -700,6 +726,7 @@
     <div class="filter-group" id="all-year-chips"></div>
   </div>
 
+  <div class="section-label">趨勢與分布</div>
   <div class="charts-grid">
     <div class="chart-card full">
       <div class="chart-header">
@@ -712,6 +739,21 @@
       <div class="canvas-wrap" style="height:280px">
         <canvas id="monthlyChart" role="img" aria-label="每月場租使用場次趨勢圖">月份場次資料</canvas>
       </div>
+    </div>
+    <div class="chart-card full">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">全年 星期 × 時段 總覽</div>
+          <div class="chart-subtitle" id="ym-subtitle">各時段在每個星期的使用場次</div>
+        </div>
+        <div class="period-legend">
+          <span><b style="color:#58a6ff">A</b>10:30–13:30</span>
+          <span><b style="color:#3fb950">B</b>14:00–17:00</span>
+          <span><b style="color:#d29922">C</b>17:30–20:30</span>
+        </div>
+      </div>
+      <div id="ym-months" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+      <div id="ym-container"></div>
     </div>
     <div class="chart-card">
       <div class="chart-header">
@@ -737,15 +779,19 @@
     </div>
   </div>
 
+  <div class="section-label">明細</div>
   <div class="charts-grid">
     <div class="chart-card full">
-      <div class="chart-header">
-        <div>
-          <div class="chart-title">各月星期 × 時段 使用熱力圖</div>
-          <div class="chart-subtitle" id="heatmap-subtitle">顏色深淺代表使用頻率（週一固定休館）</div>
-        </div>
-      </div>
-      <div id="heatmap-container"></div>
+      <details class="fold">
+        <summary class="chart-header">
+          <div>
+            <div class="chart-title">各月 × 星期 逐月熱力圖</div>
+            <div class="chart-subtitle" id="heatmap-subtitle">顏色深淺代表使用頻率（週一固定休館）</div>
+          </div>
+          <span class="chev"></span>
+        </summary>
+        <div id="heatmap-container"></div>
+      </details>
     </div>
   </div>
 
@@ -970,7 +1016,7 @@ function buildMainTabs() {
     ? `${allYrs[0]} ~ ${allYrs[allYrs.length-1]} 年度`
     : (allYrs[0] ? `${allYrs[0]} 年度` : '');
   const subEl = document.getElementById('header-sub');
-  if (subEl) subEl.textContent = `${yearRange} 場地租賃紀錄分析 ｜ 時段 A: 10:30–13:30 ｜ B: 14:00–17:00 ｜ C: 17:30–20:30`;
+  if (subEl) subEl.textContent = `${yearRange} 場地租賃紀錄分析 ｜ 週一固定休館`;
 }
 
 // ── Build sub-year-filter chips ──
@@ -1677,6 +1723,38 @@ function renderDetailTable() {
   document.getElementById('detail-table').innerHTML = `<table class="data-table"><thead>${header}</thead><tbody>${rows}</tbody></table>`;
 }
 
+let ymMonth = -1;
+function setYmMonth(m) { ymMonth = m; renderYearMatrix(); }
+function renderYearMatrix() {
+  const yrs = getEffectiveYears();
+  const floors = currentFloor === "all" ? ["1F","2F"] : [currentFloor];
+  const grid = PERIODS.map(() => DAYS.map(() => 0));
+  yrs.forEach(y => floors.forEach(f => DAYS.forEach((d, di) => {
+    (RAW[y]?.[f]?.[d] || []).forEach((abc, mi) => { if (ymMonth < 0 || mi === ymMonth) abc.forEach((v, pi) => { grid[pi][di] += v; }); });
+  })));
+  const rowT = grid.map(r => r.reduce((a,b)=>a+b,0));
+  const colT = DAYS.map((_, di) => grid.reduce((a,r)=>a+r[di],0));
+  const all = rowT.reduce((a,b)=>a+b,0);
+  const max = Math.max(1, ...grid.flat());
+  const cell = v => {
+    if (v === 0) return "background:rgba(255,255,255,0.04);color:#484f58";
+    const t = v / max;
+    return `background:rgba(56,140,255,${(0.18 + t*0.75).toFixed(2)});color:${t>0.6?'#fff':'#cce8ff'}`;
+  };
+  const labels = ["一","二","三","四","五","六","日"];
+  document.getElementById("ym-months").innerHTML = ["全年",...ML].map((t,i)=>`<button class="filter-chip ${ymMonth===i-1?'active':''}" onclick="setYmMonth(${i-1})">${t}</button>`).join("");
+  const sub = document.getElementById("ym-subtitle");
+  if (sub) sub.textContent = `${yrs.length>1 ? yrs.join("＋")+"年累計" : yrs[0]+"年"}${ymMonth<0?"全年":" "+ML[ymMonth]} ｜ ${currentFloor==="all"?"1F+2F":currentFloor} ｜ 共 ${all} 場`;
+  let h = `<table class="ym-table"><thead><tr><th></th>${labels.map((l,i)=>`<th class="${i===0?'off':''}">${l}${i===0?'<br><span style="font-size:9px">休館</span>':''}</th>`).join("")}<th style="width:64px">合計</th></tr></thead><tbody>`;
+  grid.forEach((row, pi) => {
+    h += `<tr><td class="rowhead"><b style="color:${PERIOD_COLORS[pi]}">${PERIODS[pi]}</b>${["10:30–13:30","14:00–17:00","17:30–20:30"][pi]}</td>` +
+      row.map((v, di) => `<td><div class="ym-cell" style="${cell(v)}${di===0?';opacity:.55':''}" title="${PERIODS[pi]} 段 週${labels[di]}：${v} 場">${v}${all&&v?`<small>${Math.round(v/all*100)}%</small>`:''}</div></td>`).join("") +
+      `<td class="ym-tot">${rowT[pi]}<small>${all?Math.round(rowT[pi]/all*100):0}%</small></td></tr>`;
+  });
+  h += `<tr class="ym-foot"><td class="rowhead">合計</td>${colT.map(v=>`<td class="ym-tot">${v}</td>`).join("")}<td class="ym-tot" style="font-weight:700">${all}</td></tr></tbody></table>`;
+  document.getElementById("ym-container").innerHTML = h;
+}
+
 function renderAll() {
   buildMainTabs();
   buildAllYearSubBar();
@@ -1685,6 +1763,7 @@ function renderAll() {
   renderWeekdayChart();
   renderPeriodChart();
   renderFloorChart();
+  renderYearMatrix();
   renderHeatmap();
   renderDetailTable();
 }
